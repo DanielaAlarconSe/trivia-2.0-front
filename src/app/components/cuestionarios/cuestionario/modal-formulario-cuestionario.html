@@ -1,0 +1,111 @@
+<h2 mat-dialog-title class="bg-ciber-p-as-1 text-white">
+  <i class="fa-solid fa-clipboard"></i> Formulario trivia
+</h2>
+<div mat-dialog-content>
+  <div class="row mt-4">
+    <div class="col">
+      <form [formGroup]="formulario">
+        <fieldset class="scheduler-border shadow-sm">
+          <legend class="scheduler-border mb-4">Trivia</legend>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label
+                  >Nombre de la trivia:
+                  <span class="requerido"> * </span></label
+                >
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <input
+                    matInput
+                    formControlName="nombre"
+                    required
+                    (input)="transformToUppercase($event, 'nombre')"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label>Curso: <span class="requerido"> * </span></label>
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-select class="font-sm-corhuila" formControlName="curso">
+                    <mat-option
+                      *ngFor="let option of cursos"
+                      [value]="option.codigo"
+                      >{{ option.nombre }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label
+                  >Fecha de inicio: <span class="requerido"> * </span></label
+                >
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <input
+                    matInput
+                    formControlName="fechaInicio"
+                    type="datetime-local"
+                    placeholder="start date"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label>Fecha Fin: <span class="requerido"> * </span></label>
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <input
+                    matInput
+                    type="datetime-local"
+                    placeholder="start date"
+                    formControlName="fechaFin"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label>Instrucciones: <span class="requerido"> * </span></label>
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <textarea
+                    matInput
+                    #mesage
+                    maxlength="250"
+                    formControlName="instrucciones"
+                    id="instrucciones"
+                    rows="3"
+                    placeholder="Parrafo con instrucciones..."
+                    required
+                  ></textarea>
+                  <mat-hint align="end">{{ mesage.value.length }}/250</mat-hint>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+  <div class="row text-right">
+    <div class="col">
+      <button class="btn btn-danger" mat-dialog-close (click)="cancelar()">
+        <i class="fa-solid fa-xmark"></i> Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn btn-ciber-v ml-2"
+        [disabled]="!formulario.valid"
+        (click)="generarCuestionario()"
+      >
+        <i class="far fa-save"></i> Guardar
+      </button>
+    </div>
+  </div>
+</div>

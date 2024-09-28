@@ -1,0 +1,155 @@
+<app-admin-navbar>
+  <div class="pl-4 pr-4 pb-4 text-center">
+    <div class="card shadow-sm mt-3">
+      <div class="card-header text-center" style="background-color: #d5dbdb">
+        <h4 class="mt-2">Administrar Relación Pregunta - Respuestas</h4>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Trivia</mat-label>
+              <mat-select (selectionChange)="obtenerPreguntas($event)">
+                <mat-option
+                  *ngFor="let cuestionario of listadoCuestionarios"
+                  [value]="cuestionario"
+                >
+                  {{ cuestionario.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Pregunta</mat-label>
+              <mat-select (selectionChange)="obtenerRespuestas($event)">
+                <mat-option
+                  *ngFor="let pregunta of listadoPreguntas"
+                  [value]="pregunta"
+                >
+                  {{ pregunta.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <div class="form-group">
+              <mat-form-field class="example-full-width" appearance="outline">
+                <mat-label>Campo de búsqueda</mat-label>
+                <input
+                  matInput
+                  (keyup)="filtrar($event)"
+                  type="text"
+                  required
+                />
+                <button matSuffix mat-icon-button>
+                  <mat-icon>search</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-sm-4 text-center mt-2" *ngIf="codigoPregunta">
+            <button class="btn btn-ciber-v" (click)="registrarFormulario()">
+              <i class="fa-solid fa-plus"></i> Relacionar Respuesta
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <table
+              mat-table
+              [dataSource]="dataSource"
+              class="table table-hover shadow-sm"
+            >
+              <ng-container matColumnDef="index">
+                <th mat-header-cell *matHeaderCellDef>N°</th>
+                <td mat-cell *matCellDef="let element; let i = index">
+                  {{ dataSource.filteredData.indexOf(element) + 1 }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="cuestionario">
+                <th mat-header-cell *matHeaderCellDef>Cuestionario</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.cuestionarioNombre }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="pregunta">
+                <th mat-header-cell *matHeaderCellDef>Pregunta</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.preguntaNombre }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="respuesta">
+                <th mat-header-cell *matHeaderCellDef>Respuesta</th>
+                <td
+                  mat-cell
+                  *matCellDef="let element"
+                  class="instrucciones-column"
+                >
+                  {{ element.respuestaOpcionNombre }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="puntuacion">
+                <th mat-header-cell *matHeaderCellDef>Puntuación</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.puntuacion }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="estado">
+                <th mat-header-cell *matHeaderCellDef>Estado</th>
+                <td mat-cell *matCellDef="let element">
+                  <button
+                    *ngIf="element.estado == 1"
+                    class="btn btn-ciber-v btn-sm mr-2"
+                    title="Activo"
+                  >
+                    <i class="fa-solid fa-check fa-xs"></i>
+                  </button>
+                  <button
+                    *ngIf="element.estado == 0"
+                    class="btn btn-secondary btn-sm mr-2"
+                    title="Inactivo"
+                  >
+                    <i class="fa-regular fa-circle-xmark"></i>
+                  </button>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="opciones">
+                <th mat-header-cell *matHeaderCellDef>Opciones</th>
+                <td mat-cell *matCellDef="let element">
+                  <button
+                    class="btn btn-corhuila-delete btn-sm mr-2"
+                    title="Borrar"
+                    (click)="eliminarRespuesta(element)"
+                  >
+                    <i class="fa-solid fa-trash fa-xs"></i>
+                  </button>
+                  <button
+                    class="btn btn-corhuila-editar btn-sm"
+                    (click)="editarFormulario(element)"
+                  >
+                    <i class="fa-solid fa-pencil fa-xs"></i>
+                  </button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              <!-- No Data Row -->
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+                  No hay valores por el momento
+                </td>
+              </tr>
+            </table>
+            <mat-paginator
+              [pageSizeOptions]="[10, 20, 30]"
+              showFirstLastButtons
+            ></mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-admin-navbar>

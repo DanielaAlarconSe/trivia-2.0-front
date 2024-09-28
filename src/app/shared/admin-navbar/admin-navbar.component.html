@@ -1,0 +1,294 @@
+<mat-sidenav-container class="sidenav-container" id="page-container">
+  <mat-sidenav
+    #drawer
+    style="width: 220px"
+    *ngIf="navbarHiddenService.visibleSideBar"
+    class="sidenav"
+    fixedInViewport
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+    #target
+  >
+    <mat-toolbar>
+      <span class="logo-lg"
+        ><img
+          class="img-fluid"
+          src="assets/images/Logo1.png"
+          [routerLink]="['/inicio']"
+      /></span>
+    </mat-toolbar>
+    <mat-nav-list style="padding-bottom: 0">
+      <a class="list" mat-list-item [routerLink]="['/panel']">
+        <small class="pl-2 item-principal text-white">
+          <i class="fas fa-home"></i> Inicio
+        </small>
+      </a>
+    </mat-nav-list>
+    <mat-accordion *ngIf="rol == 1">
+      <mat-expansion-panel
+        class="sidenav"
+        style="width: 100%"
+        (opened)="panelOpenState = true"
+        (closed)="panelOpenState = false"
+        (opened)="togglePanel('panel1')"
+        [expanded]="panelAbierto === 'panel1'"
+      >
+        <mat-expansion-panel-header class="disable_ripple specific-class">
+          <mat-panel-title>
+            <small class="text-white mt-2">
+              <i class="fa-solid fa-users"></i> Gestión de Personal
+            </small>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          <a
+            class="pl-5 sidenav-accordion"
+            mat-list-item
+            style="width: 300px"
+            [routerLink]="['/persona']"
+            routerLinkActive="router-link-active"
+          >
+            <small class="text-white">
+              <i class="fa-solid fa-user-pen"></i> Persona
+            </small>
+          </a>
+          <a
+            class="pl-5 sidenav-accordion"
+            mat-list-item
+            style="width: 300px"
+            [routerLink]="['/usuario']"
+            routerLinkActive="router-link-active"
+          >
+            <small class="text-white">
+              <i class="fa-solid fa-user-plus"></i> Usuario
+            </small>
+          </a>
+        </mat-nav-list>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion *ngIf="rol == 1">
+      <mat-expansion-panel
+        class="sidenav"
+        style="width: 100%"
+        (opened)="panelOpenState = true"
+        (closed)="panelOpenState = false"
+        (opened)="togglePanel('panel2')"
+        [expanded]="panelAbierto === 'panel2'"
+      >
+        <mat-expansion-panel-header class="disable_ripple specific-class">
+          <mat-panel-title>
+            <small class="text-white mt-2">
+              <i class="fa-solid fa-chalkboard"></i> Gestión de Cursos
+            </small>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          <a
+            class="pl-5 sidenav-accordion"
+            mat-list-item
+            style="width: 300px"
+            [routerLink]="['/curso']"
+            routerLinkActive="router-link-active"
+          >
+            <small class="text-white">
+              <i class="fas fa-edit"></i> Cursos
+            </small>
+          </a>
+        </mat-nav-list>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion>
+      <mat-expansion-panel
+        class="sidenav"
+        style="width: 100%"
+        (opened)="panelOpenState = true"
+        (closed)="panelOpenState = false"
+        (opened)="togglePanel('panel3')"
+        [expanded]="panelAbierto === 'panel3'"
+      >
+        <mat-expansion-panel-header class="disable_ripple specific-class">
+          <mat-panel-title>
+            <small class="text-white mt-2">
+              <i class="fa-solid fa-file-lines"></i> Trivia
+            </small>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          <a
+            class="pl-5 sidenav-accordion"
+            mat-list-item
+            style="width: 300px"
+            [routerLink]="['/cuestionario']"
+            routerLinkActive="router-link-active"
+          >
+            <small class="text-white">
+              <i class="fa-solid fa-circle-plus"></i> Crear trivia
+            </small>
+          </a>
+          <a
+            class="pl-5 sidenav-accordion"
+            mat-list-item
+            style="width: 300px"
+            [routerLink]="['/pregunta']"
+            routerLinkActive="router-link-active"
+          >
+            <small class="text-white">
+              <i class="fa-solid fa-file-circle-question"></i> Crear Preguntas
+            </small>
+          </a>
+          <a
+            class="pl-5 sidenav-accordion"
+            mat-list-item
+            style="width: 300px"
+            [routerLink]="['/respuesta']"
+            routerLinkActive="router-link-active"
+          >
+            <small class="text-white">
+              <i class="fa-solid fa-file-signature"></i> Crear Respuestas
+            </small>
+          </a>
+          <a
+            class="pl-5 sidenav-accordion"
+            mat-list-item
+            style="width: 300px"
+            [routerLink]="['/pregunta-respuesta']"
+            routerLinkActive="router-link-active"
+          >
+            <small class="text-white">
+              <i class="fa-solid fa-diagram-project"></i> Relacionar P y R
+            </small>
+          </a>
+          <a
+            class="pl-5 sidenav-accordion"
+            mat-list-item
+            style="width: 300px"
+            [routerLink]="['/vista-previa']"
+            routerLinkActive="router-link-active"
+          >
+            <small class="text-white">
+              <i class="fa-solid fa-eye"></i> Vista previa
+            </small>
+          </a>
+        </mat-nav-list>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion>
+      <mat-expansion-panel
+        class="sidenav"
+        style="width: 100%"
+        (opened)="panelOpenState = true"
+        (closed)="panelOpenState = false"
+        (opened)="togglePanel('panel4')"
+        [expanded]="panelAbierto === 'panel4'"
+      >
+        <mat-expansion-panel-header class="disable_ripple specific-class">
+          <mat-panel-title>
+            <small class="text-white mt-2">
+              <i class="fa-solid fa-chart-simple"></i> Reportes
+            </small>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          <a
+            class="pl-5 sidenav-accordion"
+            mat-list-item
+            style="width: 300px"
+            [routerLink]="['/calificacion']"
+            routerLinkActive="router-link-active"
+          >
+            <small class="text-white">
+              <i class="fa-solid fa-ranking-star"></i> Calificaciones
+            </small>
+          </a>
+          <a
+            class="pl-5 sidenav-accordion"
+            mat-list-item
+            style="width: 300px"
+            [routerLink]="['/respuestas']"
+            routerLinkActive="router-link-active"
+          >
+            <small class="text-white">
+              <i class="fa-solid fa-file-invoice"></i> Respuestas
+            </small>
+          </a>
+        </mat-nav-list>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <div class="text-center footer-tabs mb-2">
+      <small class="text-white font-usco-default font-weight-bold text-center"
+        >© {{ anio | date : "yyyy" }} Ciberseguridad en Línea</small
+      >
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content (validarToken)="receiveMessage($event)">
+    <mat-toolbar class="toolbar">
+      <button
+        type="button"
+        class="btn btn-usco-vt m-1 text-white"
+        aria-label="Toggle sidenav"
+        (click)="toggle()"
+        *ngIf="isHandset$"
+      >
+        <i class="fas fa-bars"></i>
+      </button>
+      <h6 class="font-corhuila">
+        Administrador Trivia Ciberseguridad en Línea
+      </h6>
+      <ul class="navbar-nav ml-auto cursor-select">
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle text-white"
+            id="navbarDropdownMenu"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <img
+              src="assets/images/foto-user.png"
+              width="40"
+              height="40"
+              class="rounded-circle d-inline-block align-top"
+              style="border: solid 3px white"
+              alt="avatar image"
+            />
+            <span class="pl-2"
+              >{{ nombre | titlecase }} {{ apellido | titlecase }}</span
+            ></a
+          >
+          <div
+            class="dropdown-menu dropdown-menu-right dropdown-info"
+            aria-labelledby="navbarDropdownMenu"
+            id="gradiante"
+          >
+            <div class="text-center">
+              <a class="dropdown-info"
+                ><img
+                  src="assets/images/foto-user.png"
+                  class="rounded-circle z-depth-0"
+                  style="border: solid 3px white"
+                  alt="avatar image"
+                  height="100"
+              /></a>
+              <a class="dropdown-item font-usco-default"
+                ><b> {{ nombre | titlecase }} {{ apellido | titlecase }}</b></a
+              >
+              <a class="dropdown-item font-usco-default">Administrador</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown"
+                ><button
+                  (click)="logout()"
+                  class="btn btn-ciber-v"
+                  type="button"
+                >
+                  Cerrar Sesión
+                </button></a
+              >
+            </div>
+          </div>
+        </li>
+      </ul>
+    </mat-toolbar>
+    <ng-content (validarToken)="receiveMessage($event)"></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>

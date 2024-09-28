@@ -1,0 +1,89 @@
+<h2 mat-dialog-title class="bg-ciber-p-as-1 text-white">
+  <i class="fa-solid fa-clipboard"></i> Formulario Usuario
+</h2>
+<div mat-dialog-content>
+  <div class="row mt-4">
+    <div class="col">
+      <form [formGroup]="form">
+        <fieldset class="scheduler-border shadow-sm mt-4">
+          <legend class="scheduler-border mb-4">
+            {{data.usuario.nombre}} {{data.usuario.apellido}}
+          </legend>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label>Usuario:</label>
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <input matInput [value]="data.usuario.correo" readonly />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label for="contrasena"
+                  >Contraseña: <span class="requerido"> * </span></label
+                >
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <input
+                    autocomplete="off"
+                    matInput
+                    [type]="hide ? 'password' : 'text'"
+                    formControlName="contrasena"
+                  />
+                  <button
+                    mat-icon-button
+                    matSuffix
+                    (click)="hide = !hide"
+                    [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide"
+                  >
+                    <mat-icon
+                      >{{hide ? 'visibility' : 'visibility_off'}}</mat-icon
+                    >
+                  </button>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label for="opciones"
+                  >Tipo de Usuario: <span class="requerido"> * </span></label
+                >
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-select
+                    class="font-sm-corhuila"
+                    formControlName="tipo"
+                    placeholder="Seleccione un perfil"
+                  >
+                    <mat-option
+                      *ngFor="let option of usuarioTipo"
+                      [value]="option.codigo"
+                      >{{ option.nombre }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+  <div class="row text-right">
+    <div class="col">
+      <button class="btn btn-danger ml-3" mat-dialog-close (click)="cancelar()">
+        <i class="fa-solid fa-xmark"></i> Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn btn-ciber-v ml-2"
+        [disabled]="!form.valid"
+        (click)="generarUsuario()"
+      >
+        <i class="far fa-save"></i> Guardar
+      </button>
+    </div>
+  </div>
+</div>

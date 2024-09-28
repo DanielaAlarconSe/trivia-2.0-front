@@ -1,0 +1,55 @@
+<h2 mat-dialog-title class="bg-ciber-p-as-1 text-white">
+  <i class="fa-solid fa-clipboard"></i> Formulario pregunta
+</h2>
+<div mat-dialog-content>
+  <div class="row mt-4">
+    <div class="col">
+      <form [formGroup]="formulario">
+        <fieldset class="scheduler-border shadow-sm">
+          <legend class="scheduler-border mb-4">
+            {{ data.respuesta.cuestionarioNombre}}
+          </legend>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label>Respuesta: <span class="requerido"> * </span></label>
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <input matInput formControlName="nombre" required />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label>Puntuación: <span class="requerido"> * </span></label>
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <input
+                    matInput
+                    formControlName="puntuacion"
+                    type="number"
+                    min="0"
+                    required
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+  <div class="row text-right">
+    <div class="col">
+      <button class="btn btn-danger" mat-dialog-close (click)="cancelar()">
+        <i class="fa-solid fa-xmark"></i> Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn btn-ciber-v ml-2"
+        [disabled]="!formulario.valid"
+        (click)="generarRespuesta()"
+      >
+        <i class="far fa-save"></i> Guardar
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,91 @@
+<h2 mat-dialog-title class="bg-ciber-p-as-1 text-white">
+  <i class="fa-solid fa-clipboard"></i> Formulario pregunta
+</h2>
+<div mat-dialog-content>
+  <div class="row mt-4">
+    <div class="col">
+      <form [formGroup]="formulario">
+        <fieldset class="scheduler-border shadow-sm">
+          <legend class="scheduler-border mb-4">
+            {{ data.pregunta.cuestionarioNombre}}
+          </legend>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label>Pregunta: <span class="requerido"> * </span></label>
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <input matInput formControlName="nombre" required />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label>Texto adicional: </label>
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <textarea
+                    matInput
+                    #mesage
+                    maxlength="2500"
+                    formControlName="textoAdicional"
+                    rows="2"
+                    placeholder="Texto adicional..."
+                  ></textarea>
+                  <mat-hint align="end"
+                    >{{ mesage.value.length }}/2500</mat-hint
+                  >
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <!-- <div class="col">
+              <div class="form-group">
+                <label
+                  >Tipo de pregunta: <span class="requerido"> * </span></label
+                >
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-select>
+                    <mat-option value="1">Principal</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div> -->
+            <div class="col">
+              <div class="form-group">
+                <label
+                  >Tipo de respuesta: <span class="requerido"> * </span></label
+                >
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-select formControlName="tipoRespuestaCodigo">
+                    <mat-option
+                      *ngFor="let respuestaTipo of listadoRespuestaTipo"
+                      [value]="respuestaTipo.codigo"
+                      >{{ respuestaTipo.nombre }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+  <div class="row text-right">
+    <div class="col">
+      <button class="btn btn-danger" mat-dialog-close (click)="cancelar()">
+        <i class="fa-solid fa-xmark"></i> Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn btn-ciber-v ml-2"
+        [disabled]="!formulario.valid"
+        (click)="generarCuestionario()"
+      >
+        <i class="far fa-save"></i> Guardar
+      </button>
+    </div>
+  </div>
+</div>

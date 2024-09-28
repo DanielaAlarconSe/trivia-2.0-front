@@ -1,0 +1,122 @@
+<h2 mat-dialog-title class="bg-ciber-p-as-1 text-white">
+  <i class="fa-solid fa-clipboard"></i> Formulario Persona
+</h2>
+<div mat-dialog-content>
+  <div class="row mt-4">
+    <div class="col">
+      <form [formGroup]="form">
+        <fieldset class="scheduler-border shadow-sm mt-4">
+          <legend class="scheduler-border mb-4">Datos personales</legend>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label>Nombres: <span class="requerido"> * </span></label>
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <input
+                    matInput
+                    formControlName="nombre"
+                    required
+                    placeholder="ej. Daniel E."
+                    (input)="transformToUppercase($event, 'nombre')"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label>Apellidos: <span class="requerido"> * </span></label>
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <input
+                    matInput
+                    formControlName="apellido"
+                    placeholder="ej. Perdomo G."
+                    (input)="transformToUppercase($event, 'apellido')"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label
+                  >País de Residencia: <span class="requerido"> * </span></label
+                >
+                <mat-form-field
+                  class="example-full-width"
+                  appearance="fill"
+                  *ngIf="!editar"
+                >
+                  <input
+                    type="text"
+                    required
+                    placeholder="Ej. Colombia"
+                    aria-label="Number"
+                    matInput
+                    formControlName="pais"
+                    [matAutocomplete]="auto"
+                  />
+                  <mat-autocomplete
+                    autoActiveFirstOption
+                    #auto="matAutocomplete"
+                    [displayWith]="displayFn"
+                  >
+                    <mat-option
+                      *ngFor="let option of paises | async"
+                      [value]="option"
+                    >
+                      {{ option.nombre }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <mat-form-field
+                  class="example-full-width"
+                  appearance="fill"
+                  *ngIf="editar"
+                >
+                  <mat-select class="font-sm-corhuila" formControlName="pais">
+                    <mat-option
+                      class="font-sm-corhuila"
+                      *ngFor="let option of pais"
+                      [value]="option.codigo"
+                      >{{ option.nombre }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label
+                  >Correo electrónico: <span class="requerido"> * </span></label
+                >
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <input
+                    matInput
+                    formControlName="correoPersonal"
+                    placeholder="ej. example@gmail.com"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+  <div class="row text-right">
+    <div class="col">
+      <button class="btn btn-danger ml-3" mat-dialog-close (click)="cancelar()">
+        <i class="fa-solid fa-xmark"></i> Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn btn-ciber-v ml-2"
+        [disabled]="!form.valid"
+        (click)="generarPersona()"
+      >
+        <i class="far fa-save"></i> Guardar
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+.card {
+    display: inline-block !important;
+    position: relative !important;
+    width: 90%;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 14%) !important;
+    border-radius: 3px !important;
+    color: black;
+    background: #fff;
+    padding-top: 0px !important;
+  }
+  
+  .card-header {
+    box-shadow: 0 5px 20px -12px rgb(0 0 0 / 42%), 0 4px 25px 0px rgb(0 0 0 / 12%),
+      0 8px 10px -5px rgb(0 0 0 / 20%);
+    border-radius: 3px;
+    padding: 15px;
+    background-color: #293737;
+    margin-top: -25px !important;
+    margin-bottom: 25px;
+    color: #fff;
+    height: 65px !important;
+  }
+  
+  .toolbar {
+    background: linear-gradient(to left, black, rgb(7, 54, 7), rgb(4, 101, 4));
+    color: #fff;
+  }

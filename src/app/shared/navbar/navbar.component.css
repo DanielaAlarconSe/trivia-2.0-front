@@ -1,0 +1,13 @@
+.mat-toolbar{
+    color: white;
+    background: linear-gradient(to right, white, green, black);
+}
+.contact-info {
+    display: flex;
+    align-items: center;
+    font-size: medium;
+  }
+  .contact-info mat-icon {
+    margin-right: 5px; /* Ajusta el margen entre el ícono y el texto */
+  }
+  

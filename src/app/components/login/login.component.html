@@ -1,0 +1,95 @@
+<div class="page-not-found-container">
+  <div class="content">
+    <div class="card-login">
+      <div class="card-header bg-ciber-p-as-1 header-usco-card">
+        <div class="row">
+          <div class="col">
+            <img
+              title="USCO"
+              mat-card-image
+              src="assets/images/login.png"
+              style="width: 400px"
+            />
+          </div>
+        </div>
+        <hr class="punteada" />
+        <div class="row">
+          <div class="col">
+            <h6 class="font-weight-bold text-white text-uppercase">
+              Inicio de sesión
+            </h6>
+          </div>
+        </div>
+      </div>
+      <div class="card-body text-left">
+        <div class="container">
+          <form [formGroup]="formulario">
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label class="ml-1"
+                    >Usuario <span class="requerido">*</span></label
+                  >
+                  <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <i class="fa-solid fa-user"></i>
+                      </div>
+                    </div>
+                    <input
+                      type="text"
+                      formControlName="usuario"
+                      class="form-control"
+                      placeholder="Correo electrónico"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label class="ml-1"
+                    >Contraseña <span class="requerido">*</span></label
+                  >
+                  <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <i class="fa-solid fa-lock"></i>
+                      </div>
+                    </div>
+                    <input
+                      class="form-control"
+                      formControlName="contrasenia"
+                      type="password"
+                      placeholder="Digite la clave"
+                      autocomplete="off"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-2 mb-4 text-center">
+              <div class="col">
+                <button
+                  (click)="login()"
+                  type="submit"
+                  class="btn btn-ciber-v"
+                  [disabled]="!formulario.valid"
+                >
+                  Ingresar
+                  <span
+                    *ngIf="cargando"
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

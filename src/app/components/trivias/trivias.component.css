@@ -1,0 +1,80 @@
+.example-full-width {
+  width: 100%;
+}
+
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.card {
+  display: inline-block !important;
+  position: relative !important;
+  width: 90%;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 14%) !important;
+  border-radius: 3px !important;
+  color: rgba(0, 0, 0, 0.87);
+  background: #fff;
+  padding-top: 0px !important;
+}
+
+.card-header {
+  box-shadow: 0 5px 20px -12px rgb(0 0 0 / 42%), 0 4px 25px 0px rgb(0 0 0 / 12%),
+    0 8px 10px -5px rgb(0 0 0 / 20%);
+  border-radius: 3px;
+  padding: 15px;
+  background-color: #1e262b; /* a#1E262B  */
+  margin-top: -25px !important;
+  margin-bottom: 25px;
+  color: #fff;
+  height: 100px !important;
+}
+
+.dashed {
+  border-bottom: dashed 1px #000000;
+}
+
+.foto-usco {
+  border: solid 5px white;
+  border-radius: 5px;
+}
+
+.no-border {
+  border: none;
+}
+
+.font-small-usco {
+  font-size: 11px;
+}
+
+.card-usco-menu {
+  filter: brightness(100%);
+}
+
+.card-usco-menu:hover {
+  filter: brightness(95%);
+}
+
+.card-img-top {
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+}
+.card-body {
+  text-align: center;
+  box-shadow: 0px 15px 15px -8px rgba(0, 0, 0, 0.5);
+}
+
+.card-body h6 {
+  font-size: 14px;
+}
+
+.card-title {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+@media (max-width: 800px) {
+  .mx-30 {
+    margin-bottom: 30px;
+  }
+}
