@@ -20,6 +20,8 @@ import Swal from 'sweetalert2';
 import { Cuestionario } from 'src/app/models/cuestionario';
 import { CuestionarioService } from 'src/app/services/cuestionario.service';
 import { Curso } from 'src/app/models/curso';
+import { CuestionarioCategoriaService } from 'src/app/services/cuestionario-categoria.service';
+import { CuestionarioCategoria } from 'src/app/models/cuestionario-categoria';
 
 @Component({
   selector: 'app-cuestionario',
@@ -40,6 +42,7 @@ export class CuestionarioComponent {
     'index',
     'nombre',
     'instrucciones',
+    'categoria',
     'curso',
     'fechaInicio',
     'fechaFin',
@@ -206,6 +209,7 @@ export class ModalFormularioCuestionario {
   editar: boolean = false;
   formulario!: FormGroup;
   cursos: Curso[] = [];
+  categorias: CuestionarioCategoria[] = [];
   fechaLimiteMinima!: any;
   fechaLimiteMinimaVigencia!: any;
 
@@ -217,12 +221,14 @@ export class ModalFormularioCuestionario {
     private authService: AuthService,
     private router: Router,
     private cuestionarioService: CuestionarioService,
+    private cuestionarioCategoriaService: CuestionarioCategoriaService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.fechaLimiteMinima = new Date();
     if (this.authService.validacionToken()) {
       this.crearFormulario();
       this.obtenerCursos();
+      this.obtenerCategorias();
       if (JSON.stringify(data) !== 'null') {
         this.editarCuestionario(data.cuestionario);
       }
@@ -230,6 +236,7 @@ export class ModalFormularioCuestionario {
   }
 
   ngOnInit() {}
+
 
   limiteVigencia() {
     this.fechaLimiteMinimaVigencia = new Date(
@@ -245,6 +252,7 @@ export class ModalFormularioCuestionario {
       curso: new FormControl('', Validators.required),
       fechaInicio: new FormControl('', Validators.required),
       fechaFin: new FormControl('', Validators.required),
+      categoria: new FormControl('', Validators.required),
       estado: new FormControl(''),
     });
   }
@@ -252,6 +260,12 @@ export class ModalFormularioCuestionario {
   obtenerCursos(): void {
     this.cursoService.obtenerCursos().subscribe((data) => {
       this.cursos = data;
+    });
+  }
+
+  obtenerCategorias(): void {
+    this.cuestionarioCategoriaService.obtenerCategorias().subscribe((data) => {
+      this.categorias = data;
     });
   }
 
@@ -263,8 +277,11 @@ export class ModalFormularioCuestionario {
     cuestionario.cursoCodigo = this.formulario.get('curso')!.value;
     cuestionario.fechaInicio = this.formulario.get('fechaInicio')!.value;
     cuestionario.fechaFin = this.formulario.get('fechaFin')!.value;
+    cuestionario.categoriaCodigo = this.formulario.get('categoria')!.value;
     cuestionario.estado = this.formulario.get('estado')!.value;
 
+    console.log(cuestionario, ':::');
+    
     if (this.editar) {
       this.actualizarCuestionario(cuestionario);
     } else {
@@ -315,6 +332,8 @@ export class ModalFormularioCuestionario {
   }
 
   editarCuestionario(element: Cuestionario) {
+    console.log(element, );
+    
     this.editar = true;
     this.formulario.get('codigo')!.setValue(element.codigo);
     this.formulario.get('nombre')!.setValue(element.nombre);
@@ -336,6 +355,7 @@ export class ModalFormularioCuestionario {
 
     this.formulario.get('fechaInicio')!.setValue(fechaInicioFormatted);
     this.formulario.get('fechaFin')!.setValue(fechaFinFormatted);
+    this.formulario.get('categoria')!.setValue(element.categoriaCodigo);
     this.formulario.get('estado')!.setValue(element.estado);
   }
 
@@ -347,6 +367,7 @@ export class ModalFormularioCuestionario {
     cuestionario.cursoCodigo = this.formulario.get('curso')!.value;
     cuestionario.fechaInicio = this.formulario.get('fechaInicio')!.value;
     cuestionario.fechaFin = this.formulario.get('fechaFin')!.value;
+    cuestionario.categoriaCodigo = this.formulario.get('categoria')!.value;
     cuestionario.estado = this.formulario.get('estado')!.value;
     this.actualizarCuestionario(cuestionario);
   }

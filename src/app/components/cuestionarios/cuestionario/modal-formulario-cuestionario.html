@@ -26,6 +26,20 @@
             </div>
             <div class="col">
               <div class="form-group">
+                <label>Categoria: <span class="requerido"> * </span></label>
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-select class="font-sm-corhuila" formControlName="categoria">
+                    <mat-option
+                      *ngFor="let option of categorias"
+                      [value]="option.codigo"
+                      >{{ option.nombre }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
                 <label>Curso: <span class="requerido"> * </span></label>
                 <mat-form-field class="example-full-width" appearance="fill">
                   <mat-select class="font-sm-corhuila" formControlName="curso">
