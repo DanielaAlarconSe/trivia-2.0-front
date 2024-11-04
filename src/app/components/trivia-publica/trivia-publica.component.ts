@@ -67,20 +67,23 @@ export class TriviaPublicaComponent implements OnInit {
     this.setupNombreChange();
   }
 
-  takeScreenshotAndUpload() {
-    const element = this.captureElement.nativeElement;
+  takeScreenshotAndUpload(platform?: string) {
+    const element = document.querySelector('.swal2-popup') as HTMLElement;
 
     html2canvas(element).then((canvas) => {
       canvas.toBlob((blob) => {
         if (blob) {
           const formData = new FormData();
           formData.append('file', blob);
-          formData.append('upload_preset', this.uploadPreset); // Tu preset en Cloudinary
+          formData.append('upload_preset', this.uploadPreset);
 
           this.http.post(this.cloudinaryUploadUrl, formData).subscribe(
             (response: any) => {
               const imageUrl = response.secure_url;
-              this.shareOnFacebook(imageUrl);
+              if (platform === 'twitter') this.shareOnTwitter(imageUrl);
+              else if (platform === 'linkedin') this.shareOnLinkedIn(imageUrl);
+              else if (platform === 'whatsapp') this.shareOnWhatsApp(imageUrl);
+              else this.shareOnFacebook(imageUrl);
             },
             (error) => {
               console.error('Error al subir la imagen a Cloudinary:', error);
@@ -96,6 +99,23 @@ export class TriviaPublicaComponent implements OnInit {
       imageUrl
     )}`;
     window.open(facebookShareUrl, '_blank');
+  }
+
+  shareOnTwitter(imageUrl: string) {
+    const text = encodeURIComponent("¡He completado la trivia " + this.cuestionario.nombre + " de Ciberseguridad en línea con éxito! 🔒🌐 Descubre mi resultado:");
+    const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(imageUrl)}&text=${text}`;
+    window.open(twitterShareUrl, '_blank');
+  }
+
+  shareOnLinkedIn(imageUrl: string) {
+    const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(imageUrl)}`;
+    window.open(linkedInShareUrl, '_blank');
+  }
+
+  shareOnWhatsApp(imageUrl: string) {
+    const message = encodeURIComponent("¡He completado la trivia " + this.cuestionario.nombre + " de Ciberseguridad en línea con éxito! Descubre mi resultado:");
+    const whatsappShareUrl = `https://wa.me/?text=${message}%20${encodeURIComponent(imageUrl)}`;
+    window.open(whatsappShareUrl, '_blank');
   }
 
   private crearFormularioEstudiante(): void {
@@ -189,7 +209,7 @@ export class TriviaPublicaComponent implements OnInit {
     swalWithBootstrapButtons
       .fire({
         title: '¡Advertencia!',
-        text: 'Está a punto de salir de la trivia, si decides proceder sin guardar estos cambios, se perderán permanentemente.',
+        text: 'Está a punto de salir de la trivia. Si decides proceder, se perderán las respuestas seleccionadas.',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Permanecer',
@@ -206,7 +226,7 @@ export class TriviaPublicaComponent implements OnInit {
         } else if (result.dismiss === Swal.DismissReason.cancel) {
           swalWithBootstrapButtons.fire(
             'Trivias',
-            'Los cambios no se han guardado.',
+            'Se ha reiniciado el cuestionario.',
             'warning'
           );
           this.router.navigate(['/trivias', this.cuestionario.cursoCodigo]);
@@ -218,7 +238,6 @@ export class TriviaPublicaComponent implements OnInit {
     this.respuestaService.obtenerUltimoRegistro().subscribe((data) => {
       this.estudianteCodigo = data;
       if (this.formulario.valid) {
-        // Recoge las respuestas
         const respuestas: Respuesta[] = [];
         let calificacionTotal = 0;
         for (const pregunta of this.listadoPreguntas) {
@@ -227,7 +246,7 @@ export class TriviaPublicaComponent implements OnInit {
           respuesta.preguntaRespuestaCodigo = this.formulario.get(
             `respuesta${pregunta.codigo}`
           )?.value;
-          // Obtener la opción seleccionada para esta pregunta
+
           const opcionSeleccionada = this.listadoPreguntaRespuestas[
             pregunta.codigo
           ].find(
@@ -250,36 +269,36 @@ export class TriviaPublicaComponent implements OnInit {
         respuestaCuestionario.codigo = this.estudianteCodigo;
         respuestaCuestionario.calificacionTotal = calificacionTotal;
 
+        let titulo = this.cuestionario.nombre;
+
         Swal.fire({
-          title:
-            this.formularioEstudiante.get('nombre')!.value +
-            ' tu calificación es de: ' +
-            calificacionTotal,
-          text: 'Gracias por participar',
+          title: titulo,
           width: 600,
           padding: '3em',
           color: '#ffffff',
-          background: '#333333',
+          background: '#282828',
           html: `
-        <div style="display: flex; flex-direction: column; align-items: center;">
-          <img src="assets/images/login.png" alt="Google Logo" style="width: 300px; margin-bottom: 20px;" />
-          <button id="facebook-share-btn" style="
-            background-color: #1877f2;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 20px;
-          ">
-            <i class="fab fa-facebook-f" style="margin-right: 8px;"></i> Compartir en Facebook
-          </button>
-        </div>
-    `,
+            <div style="border: 3px solid #00C853; border-radius: 15px; padding: 20px; text-align: center;">
+              <h2 style="color: #00C853; margin-bottom: 15px;">¡Felicidades, ${this.formularioEstudiante.get('nombre')!.value}!</h2>
+              <p style="font-size: 18px; color: #e0e0e0; margin-bottom: 20px;">Tu calificación final es:</p>
+              <h1 style="color: #00C853; font-size: 42px; margin: 0 0 15px;">${calificacionTotal} puntos</h1>
+              <img src="assets/images/login.png" alt="Logo" style="width: 250px; margin: 15px auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);" />
+              <div style="display: flex; gap: 15px; justify-content: center; margin-top: 25px;">
+                <button id="facebook-share-btn" style="background: none; border: none; cursor: pointer;">
+                  <i class="fab fa-facebook-f" style="color: #1877f2; font-size: 28px;"></i>
+                </button>
+                <button id="twitter-share-btn" style="background: none; border: none; cursor: pointer;">
+                  <i class="fab fa-twitter" style="color: #1DA1F2; font-size: 28px;"></i>
+                </button>
+                <button id="linkedin-share-btn" style="background: none; border: none; cursor: pointer;">
+                  <i class="fab fa-linkedin-in" style="color: #0077b5; font-size: 28px;"></i>
+                </button>
+                <button id="whatsapp-share-btn" style="background: none; border: none; cursor: pointer;">
+                  <i class="fab fa-whatsapp" style="color: #25D366; font-size: 28px;"></i>
+                </button>
+              </div>
+            </div>
+          `,
           showConfirmButton: false,
           allowOutsideClick: false,
           allowEscapeKey: false,
@@ -289,46 +308,11 @@ export class TriviaPublicaComponent implements OnInit {
           },
         });
 
-        // Espera a que el modal se haya cargado en el DOM
         setTimeout(() => {
-          const facebookBtn = document.getElementById('facebook-share-btn');
-
-          facebookBtn?.addEventListener('click', () => {
-            // Selecciona el modal de SweetAlert para capturarlo
-            const swalContainer = document.querySelector(
-              '.swal2-popup'
-            ) as HTMLElement;
-
-            if (swalContainer) {
-              // Toma la captura del contenedor de SweetAlert
-              html2canvas(swalContainer).then((canvas) => {
-                canvas.toBlob((blob) => {
-                  if (blob) {
-                    const formData = new FormData();
-                    formData.append('file', blob);
-                    formData.append('upload_preset', this.uploadPreset);
-
-                    // Sube la imagen a Cloudinary (o el servicio que uses)
-                    this.http
-                      .post(this.cloudinaryUploadUrl, formData)
-                      .subscribe(
-                        (response: any) => {
-                          const imageUrl = response.secure_url;
-                          // Llama a la función para compartir en Facebook
-                          this.shareOnFacebook(imageUrl);
-                        },
-                        (error) => {
-                          console.error(
-                            'Error al subir la imagen a Cloudinary:',
-                            error
-                          );
-                        }
-                      );
-                  }
-                });
-              });
-            }
-          });
+          document.getElementById('facebook-share-btn')?.addEventListener('click', () => this.takeScreenshotAndUpload());
+          document.getElementById('twitter-share-btn')?.addEventListener('click', () => this.takeScreenshotAndUpload('twitter'));
+          document.getElementById('linkedin-share-btn')?.addEventListener('click', () => this.takeScreenshotAndUpload('linkedin'));
+          document.getElementById('whatsapp-share-btn')?.addEventListener('click', () => this.takeScreenshotAndUpload('whatsapp'));
         }, 0);
       } else {
         Swal.fire('Error', 'Por favor, complete todas las preguntas', 'error');
