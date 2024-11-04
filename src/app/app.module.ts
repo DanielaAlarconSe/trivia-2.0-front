@@ -52,6 +52,7 @@ import { CalificacionComponent } from './components/reportes/calificacion/califi
 import { RespuestasComponent } from './components/reportes/respuestas/respuestas.component';
 import { FiltroCursoPipe } from './pipes/filtro-curso.pipe';
 import { FiltroCuestionarioPipe } from './pipes/filtro-cuestionario.pipe';
+import { TriviaPublicaComponent } from './components/trivia-publica/trivia-publica.component';
 
 @NgModule({
   declarations: [
@@ -84,6 +85,7 @@ import { FiltroCuestionarioPipe } from './pipes/filtro-cuestionario.pipe';
     RespuestasComponent,
     FiltroCursoPipe,
     FiltroCuestionarioPipe,
+    TriviaPublicaComponent,
   ],
   imports: [
     BrowserModule,

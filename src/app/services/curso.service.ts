@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
@@ -54,7 +54,7 @@ export class CursoService {
         })
       );
   }
-  
+
   registrarCurso(curso: Curso): Observable<number> {
     return this.http.post<number>(`${this.url}/registrar-curso`, curso, {
       headers: this.aggAutorizacionHeader(),

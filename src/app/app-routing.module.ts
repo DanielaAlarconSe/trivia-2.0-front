@@ -17,6 +17,7 @@ import { TriviasComponent } from './components/trivias/trivias.component';
 import { TriviaComponent } from './components/trivia/trivia.component';
 import { CalificacionComponent } from './components/reportes/calificacion/calificacion.component';
 import { RespuestasComponent } from './components/reportes/respuestas/respuestas.component';
+import { TriviaPublicaComponent } from './components/trivia-publica/trivia-publica.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'inicio' },
@@ -24,6 +25,7 @@ const routes: Routes = [
   //COMPONENTES DEL SISTEMA
   { path: 'inicio', component: InicioComponent },
   { path: 'trivias/:codigo', component: TriviasComponent },
+  { path: 'trivia-publica/:codigo', component: TriviaPublicaComponent },
   { path: 'trivia/:codigo', component: TriviaComponent },
 
   { path: 'inicio-sesion', component: LoginComponent },

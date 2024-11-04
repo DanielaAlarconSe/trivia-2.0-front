@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
 import { Observable, catchError, throwError } from 'rxjs';
@@ -55,7 +55,7 @@ export class PersonaService {
         })
       );
   }
-  
+
   registrarPersona(persona: Persona): Observable<number> {
     return this.http.post<number>(`${this.url}/registrar-persona`, persona, {
       headers: this.aggAutorizacionHeader(),

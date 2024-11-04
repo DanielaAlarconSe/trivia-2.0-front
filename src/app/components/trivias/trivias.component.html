@@ -23,8 +23,7 @@
           <span class="font-usco-vt font-weight-bold">Trivias</span>
           disponibles para responder. De clic en el botón
           <span class="font-usco-vt font-weight-bold">
-            <i class="fa-solid fa-pen-to-square"></i> Realizar
-            trivia</span
+            <i class="fa-solid fa-pen-to-square"></i> Realizar trivia</span
           >
           para acceder.</small
         >
@@ -71,9 +70,8 @@
             nuestras trivias.
           </h5>
           <h5 class="font-usco-default font-usco-gr">
-            Si en el futuro hay alguna trivia en la que puedas participar,
-            se reflejará oportunamente para que puedas evaluar tus
-            conocimientos.
+            Si en el futuro hay alguna trivia en la que puedas participar, se
+            reflejará oportunamente para que puedas evaluar tus conocimientos.
           </h5>
           <h5 class="font-usco-default font-usco-gr">
             ¡Gracias por ser parte de nuestra comunidad! Atentamente, El equipo
@@ -117,14 +115,23 @@
                 class="card-text font-usco-gr font-usco-default"
                 style="height: 100px"
               >
-                {{ cuestionario.instrucciones | slice: 0:120}} ...
+                {{ cuestionario.instrucciones | slice : 0 : 120 }} ...
               </p>
               <br />
               <div class="socials text-center">
                 <button
+                  *ngIf="cuestionario.categoriaCodigo != 1"
                   class="btn btn-ciber-v btn-block"
                   (click)="realizarEncuesta(cuestionario.codigo)"
                   [routerLink]="['/trivia', cuestionario.codigo]"
+                >
+                  <i class="fa-solid fa-pen-to-square"></i> Realizar trivia
+                </button>
+                <button
+                  *ngIf="cuestionario.categoriaCodigo == 1"
+                  class="btn btn-ciber-v btn-block"
+                  (click)="realizarEncuesta(cuestionario.codigo)"
+                  [routerLink]="['/trivia-publica', cuestionario.codigo]"
                 >
                   <i class="fa-solid fa-pen-to-square"></i> Realizar trivia
                 </button>
