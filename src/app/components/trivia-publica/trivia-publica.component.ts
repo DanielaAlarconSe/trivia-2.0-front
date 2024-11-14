@@ -102,19 +102,33 @@ export class TriviaPublicaComponent implements OnInit {
   }
 
   shareOnTwitter(imageUrl: string) {
-    const text = encodeURIComponent("¡He completado la trivia " + this.cuestionario.nombre + " de Ciberseguridad en línea con éxito! 🔒🌐 Descubre mi resultado:");
-    const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(imageUrl)}&text=${text}`;
+    const text = encodeURIComponent(
+      '¡He completado la trivia ' +
+        this.cuestionario.nombre +
+        ' de Ciberseguridad en línea con éxito! 🔒🌐 Descubre mi resultado:'
+    );
+    const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+      imageUrl
+    )}&text=${text}`;
     window.open(twitterShareUrl, '_blank');
   }
 
   shareOnLinkedIn(imageUrl: string) {
-    const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(imageUrl)}`;
+    const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+      imageUrl
+    )}`;
     window.open(linkedInShareUrl, '_blank');
   }
 
   shareOnWhatsApp(imageUrl: string) {
-    const message = encodeURIComponent("¡He completado la trivia " + this.cuestionario.nombre + " de Ciberseguridad en línea con éxito! Descubre mi resultado:");
-    const whatsappShareUrl = `https://wa.me/?text=${message}%20${encodeURIComponent(imageUrl)}`;
+    const message = encodeURIComponent(
+      '¡He completado la trivia ' +
+        this.cuestionario.nombre +
+        ' de Ciberseguridad en línea con éxito! Descubre mi resultado:'
+    );
+    const whatsappShareUrl = `https://wa.me/?text=${message}%20${encodeURIComponent(
+      imageUrl
+    )}`;
     window.open(whatsappShareUrl, '_blank');
   }
 
@@ -279,7 +293,9 @@ export class TriviaPublicaComponent implements OnInit {
           background: '#282828',
           html: `
             <div style="border: 3px solid #00C853; border-radius: 15px; padding: 20px; text-align: center;">
-              <h2 style="color: #00C853; margin-bottom: 15px;">¡Felicidades, ${this.formularioEstudiante.get('nombre')!.value}!</h2>
+              <h2 style="color: #00C853; margin-bottom: 15px;">¡Felicidades, ${
+                this.formularioEstudiante.get('nombre')!.value
+              }!</h2>
               <p style="font-size: 18px; color: #e0e0e0; margin-bottom: 20px;">Tu calificación final es:</p>
               <h1 style="color: #00C853; font-size: 42px; margin: 0 0 15px;">${calificacionTotal} puntos</h1>
               <img src="assets/images/login.png" alt="Logo" style="width: 250px; margin: 15px auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);" />
@@ -309,10 +325,24 @@ export class TriviaPublicaComponent implements OnInit {
         });
 
         setTimeout(() => {
-          document.getElementById('facebook-share-btn')?.addEventListener('click', () => this.takeScreenshotAndUpload());
-          document.getElementById('twitter-share-btn')?.addEventListener('click', () => this.takeScreenshotAndUpload('twitter'));
-          document.getElementById('linkedin-share-btn')?.addEventListener('click', () => this.takeScreenshotAndUpload('linkedin'));
-          document.getElementById('whatsapp-share-btn')?.addEventListener('click', () => this.takeScreenshotAndUpload('whatsapp'));
+          document
+            .getElementById('facebook-share-btn')
+            ?.addEventListener('click', () => this.takeScreenshotAndUpload());
+          document
+            .getElementById('twitter-share-btn')
+            ?.addEventListener('click', () =>
+              this.takeScreenshotAndUpload('twitter')
+            );
+          document
+            .getElementById('linkedin-share-btn')
+            ?.addEventListener('click', () =>
+              this.takeScreenshotAndUpload('linkedin')
+            );
+          document
+            .getElementById('whatsapp-share-btn')
+            ?.addEventListener('click', () =>
+              this.takeScreenshotAndUpload('whatsapp')
+            );
         }, 0);
       } else {
         Swal.fire('Error', 'Por favor, complete todas las preguntas', 'error');

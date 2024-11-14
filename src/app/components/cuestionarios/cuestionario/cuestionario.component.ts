@@ -35,6 +35,7 @@ import { CuestionarioCategoria } from 'src/app/models/cuestionario-categoria';
   ],
 })
 export class CuestionarioComponent {
+  rutaServidor = 'http://localhost:4200/#/trivia-competitiva/';
   listadoCuestionario: Cuestionario[] = [];
 
   dataSource = new MatTableDataSource<Cuestionario>([]);
@@ -63,6 +64,33 @@ export class CuestionarioComponent {
     if (this.authService.validacionToken()) {
       this.obtenerCuestionarios();
     }
+  }
+
+  copyUrl(url: string) {
+    navigator.clipboard
+      .writeText(this.rutaServidor + url)
+      .then(() => {
+        // Mostrar mensaje de éxito y redirigir
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+          },
+        });
+
+        Toast.fire({
+          icon: 'info',
+          title: 'URL copiado al portapapeles.',
+        });
+      })
+      .catch((err) => {
+        console.error('Error al copiar la URL: ', err);
+      });
   }
 
   botonActivo(element: Cuestionario): boolean {
@@ -237,7 +265,6 @@ export class ModalFormularioCuestionario {
 
   ngOnInit() {}
 
-
   limiteVigencia() {
     this.fechaLimiteMinimaVigencia = new Date(
       this.formulario.get('fechaInicio')!.value
@@ -281,7 +308,7 @@ export class ModalFormularioCuestionario {
     cuestionario.estado = this.formulario.get('estado')!.value;
 
     console.log(cuestionario, ':::');
-    
+
     if (this.editar) {
       this.actualizarCuestionario(cuestionario);
     } else {
@@ -332,8 +359,8 @@ export class ModalFormularioCuestionario {
   }
 
   editarCuestionario(element: Cuestionario) {
-    console.log(element, );
-    
+    console.log(element);
+
     this.editar = true;
     this.formulario.get('codigo')!.setValue(element.codigo);
     this.formulario.get('nombre')!.setValue(element.nombre);

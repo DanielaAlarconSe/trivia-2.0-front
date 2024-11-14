@@ -1,30 +1,20 @@
+import { Component, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ReporteCalificacionesExcelService } from './../../../services/reporte-calificaciones-excel.service';
 import { ResultadosReportesService } from 'src/app/services/resultados-reportes.service';
 import { CursoService } from './../../../services/curso.service';
-import { Component, Inject, ViewChild } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import Swal from 'sweetalert2';
 import { Cuestionario } from 'src/app/models/cuestionario';
 import { CuestionarioService } from 'src/app/services/cuestionario.service';
 import { Curso } from 'src/app/models/curso';
-import { RespuestaCuestionario } from 'src/app/models/respuesta-cuestionario';
 import { Calificacion } from 'src/app/models/calificacion';
+import { EscalafonPdfService } from 'src/app/services/escalafon-pdf.service';
 import { DatePipe } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-calificacion',
@@ -62,6 +52,10 @@ export class CalificacionComponent {
 
   dialogRef!: MatDialogRef<any>;
   palabrasClaves!: string;
+  cursoCodigo!: number;
+  cuestionarioCodigo!: number;
+  rutaServidor = 'http://localhost:4200/#/escalafon/';
+  url: boolean = false;
 
   constructor(
     public cuestionarioService: CuestionarioService,
@@ -71,18 +65,61 @@ export class CalificacionComponent {
     public datePipe: DatePipe,
     private authService: AuthService,
     public reporteCalificacionesExcelService: ReporteCalificacionesExcelService,
-    private router: Router
+    private router: Router,
+    private escalafonPdfService: EscalafonPdfService
   ) {
     if (this.authService.validacionToken()) {
-      this.obtenerCalificaciones();
       this.obtenerCursos();
-      this.obtenerCuestionarios();
     }
   }
 
-  obtenerCalificaciones() {
+  generarPdf() {
+    this.escalafonPdfService.export(this.listadoCalificaciones);
+  }
+
+  copyUrl() {
+    navigator.clipboard
+      .writeText(this.rutaServidor + this.listadoCuestionarios[0].token)
+      .then(() => {
+        // Mostrar mensaje de éxito y redirigir
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+          },
+        });
+
+        Toast.fire({
+          icon: 'info',
+          title: 'URL copiado al portapapeles.',
+        });
+      })
+      .catch((err) => {
+        console.error('Error al copiar la URL: ', err);
+      });
+  }
+
+  obtenerCuestionario(codigo: number) {
+    this.cuestionarioService
+      .obtenerCuestionariosCursoGeneral(codigo)
+      .subscribe((data) => {
+        this.listadoCuestionarios = data;
+        console.log(JSON.stringify(this.listadoCuestionarios[0].token));
+
+        if (this.listadoCuestionarios[0].token != null) {
+          this.url = true;
+        }
+      });
+  }
+
+  obtenerCalificaciones(codigo: number) {
     this.resultadosReportesService
-      .obtenerCalificaciones()
+      .obtenerCalificacionesTrivia(codigo)
       .subscribe((data: any) => {
         this.listadoCalificaciones = data;
         this.dataSource = new MatTableDataSource<Calificacion>(data);
@@ -144,10 +181,7 @@ export class CalificacionComponent {
   }
 
   restaurar() {
-    this.obtenerCalificaciones();
     this.palabrasClaves = '';
-    this.cursoNombre = '';
-    this.cuestionarioNombre = '';
   }
 
   mensajeSuccses() {

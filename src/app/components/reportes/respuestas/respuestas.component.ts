@@ -82,7 +82,7 @@ export class RespuestasComponent {
 
   obtenerCuestionarios(codigo: number) {
     this.cuestionarioService
-      .obtenerCuestionariosCurso(codigo)
+      .obtenerCuestionariosCursoGeneral(codigo)
       .subscribe((data) => {
         this.listadoCuestionarios = data;
       });

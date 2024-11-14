@@ -8,5 +8,6 @@ export class Cuestionario {
   fechaFin!: Date;
   categoriaCodigo!: number;
   categoriaNombre!: string;
+  token!: string;
   estado!: number;
 }

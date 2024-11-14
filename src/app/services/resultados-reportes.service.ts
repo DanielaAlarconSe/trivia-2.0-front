@@ -58,6 +58,24 @@ export class ResultadosReportesService {
     });
   }
 
+  obtenerCalificacionesTrivia(codigo: number): Observable<Calificacion[]> {
+    return this.http.get<Calificacion[]>(
+      `${this.url}/obtener-calificaciones-trivia/${codigo}`,
+      {
+        headers: this.aggAutorizacionHeader(),
+      }
+    );
+  }
+
+  obtenerCalificacionesToken(token: string): Observable<Calificacion[]> {
+    return this.http.get<Calificacion[]>(
+      `${this.url}/obtener-calificaciones-token/${token}`,
+      {
+        headers: this.aggAutorizacionHeader(),
+      }
+    );
+  }
+
   generarDatosReporteAgrupado(
     cuestionario: number,
     preguntas: number[]

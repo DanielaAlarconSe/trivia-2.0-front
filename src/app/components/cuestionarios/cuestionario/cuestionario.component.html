@@ -105,16 +105,31 @@
                 <td mat-cell *matCellDef="let element">
                   <button
                     class="btn btn-corhuila-delete btn-sm mr-2"
-                    title="Borrar"
+                    #tooltip="matTooltip"
+                    matTooltip="Borrar"
+                    matTooltipPosition="above"
                     (click)="eliminarCuestionario(element)"
                   >
                     <i class="fa-solid fa-trash fa-xs"></i>
                   </button>
                   <button
                     class="btn btn-corhuila-editar btn-sm"
+                    #tooltip="matTooltip"
+                    matTooltip="Editar"
+                    matTooltipPosition="above"
                     (click)="editarCuestionario(element)"
                   >
                     <i class="fa-solid fa-pencil fa-xs"></i>
+                  </button>
+                  <button
+                    *ngIf="(element.token | json) != 'null'"
+                    class="btn btn-corhuila-delete btn-sm mr-2"
+                    #tooltip="matTooltip"
+                    matTooltip="Copiar URL"
+                    matTooltipPosition="above"
+                    (click)="copyUrl(element.token)"
+                  >
+                    <i class="fa-solid fa-link"></i>
                   </button>
                 </td>
               </ng-container>

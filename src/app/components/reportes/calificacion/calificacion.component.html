@@ -6,15 +6,18 @@
       </div>
       <div class="card-body">
         <fieldset class="scheduler-border shadow-sm">
-          <legend class="scheduler-border font-usco-vt">Filtros</legend>
+          <legend class="scheduler-border font-usco-vt">Consulta</legend>
           <div class="row">
             <div class="col">
               <mat-form-field class="example-full-width" appearance="outline">
                 <mat-label>Cursos</mat-label>
-                <mat-select [(ngModel)]="cursoNombre">
+                <mat-select
+                  [(ngModel)]="cursoCodigo"
+                  (selectionChange)="obtenerCuestionario(cursoCodigo)"
+                >
                   <mat-option
                     *ngFor="let curso of listadoCursos"
-                    [value]="curso.nombre"
+                    [value]="curso.codigo"
                   >
                     {{ curso.nombre }}
                   </mat-option>
@@ -23,11 +26,12 @@
             </div>
             <div class="col">
               <mat-form-field class="example-full-width" appearance="outline">
-                <mat-label>Cuestionarios</mat-label>
-                <mat-select [(ngModel)]="cuestionarioNombre">
+                <mat-label>Trivias</mat-label>
+                <mat-select>
                   <mat-option
                     *ngFor="let cuestionario of listadoCuestionarios"
-                    [value]="cuestionario.nombre"
+                    [value]="cuestionario.codigo"
+                    (click)="obtenerCalificaciones(cuestionario.codigo)"
                   >
                     {{ cuestionario.nombre }}
                   </mat-option>
@@ -35,6 +39,12 @@
               </mat-form-field>
             </div>
           </div>
+        </fieldset>
+        <fieldset
+          class="scheduler-border shadow-sm"
+          *ngIf="listadoCalificaciones.length > 0"
+        >
+          <legend class="scheduler-border font-usco-vt">Filtros</legend>
           <div class="row mt-3">
             <div class="col text-left">
               <mat-form-field appearance="outline" class="example-full-width">
@@ -71,7 +81,7 @@
                 class="table table-hover shadow-sm"
               >
                 <ng-container matColumnDef="index">
-                  <th mat-header-cell *matHeaderCellDef>N°</th>
+                  <th mat-header-cell *matHeaderCellDef>Puesto</th>
                   <td mat-cell *matCellDef="let element; let i = index">
                     {{ dataSource.filteredData.indexOf(element) + 1 }}
                   </td>
@@ -128,11 +138,26 @@
         <div class="row text-right">
           <div class="col">
             <button
-              class="btn btn-ciber-v"
+              class="btn btn-ciber-v mr-2"
               [disabled]="(dataCalificacion | json) == '[]'"
               (click)="datosCalificacionExcel()"
             >
               <i class="fa-solid fa-file-csv"></i> Reporte excel
+            </button>
+            <button
+              class="btn btn-dark mr-2"
+              [disabled]="(dataCalificacion | json) == '[]'"
+              (click)="generarPdf()"
+            >
+              <i class="fa-solid fa-file-pdf"></i> Reporte Pdf
+            </button>
+            <button
+              *ngIf="url"
+              class="btn btn-info"
+              [disabled]="(dataCalificacion | json) == '[]'"
+              (click)="copyUrl()"
+            >
+              <i class="fa-solid fa-link"></i> Compartir Escalafón
             </button>
           </div>
         </div>

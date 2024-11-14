@@ -1,0 +1,79 @@
+<app-navbar></app-navbar>
+<div class="container text-center mt-5">
+  <fieldset class="scheduler-border shadow-sm">
+    <legend class="scheduler-border font-usco-vt">Clasificación</legend>
+    <div class="row">
+      <div class="col">
+        <table
+          mat-table
+          [dataSource]="
+            dataSource
+              | filtroCurso : 'cursoNombre' : cursoNombre
+              | filtroCurso : 'cuestionarioNombre' : cuestionarioNombre
+          "
+          class="table table-hover shadow-sm"
+        >
+          <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef>Puesto</th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              <span *ngIf="dataSource.filteredData.indexOf(element) + 1 == 1"
+                ><img src="assets/images/medalla 1.png" style="width: 50px"
+              /></span>
+              <span *ngIf="dataSource.filteredData.indexOf(element) + 1 == 2"
+                ><img src="assets/images/medalla 2.png" style="width: 50px"
+              /></span>
+              <span *ngIf="dataSource.filteredData.indexOf(element) + 1 == 3"
+                ><img src="assets/images/medalla 3.png" style="width: 50px"
+              /></span>
+              <span *ngIf="dataSource.filteredData.indexOf(element) + 1 > 3">
+                {{ dataSource.filteredData.indexOf(element) + 1 }}</span
+              >
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="nombre">
+            <th mat-header-cell *matHeaderCellDef>Estudiante</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.estudianteNombre | uppercase }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="curso">
+            <th mat-header-cell *matHeaderCellDef>Curso</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.cursoNombre | uppercase }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="cuestionario">
+            <th mat-header-cell *matHeaderCellDef>Trivia</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.cuestionarioNombre | uppercase }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="fecha">
+            <th mat-header-cell *matHeaderCellDef>Fecha respuesta</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.fechaRegistro | date : "dd-MM-yyyy hh:mm a" }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="calificacion">
+            <th mat-header-cell *matHeaderCellDef>Calificacion</th>
+            <td mat-cell *matCellDef="let element" class="font-weight-bold">
+              {{ element.calificacion }}
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <!-- No Data Row -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+              No hay valores por el momento
+            </td>
+          </tr>
+        </table>
+        <mat-paginator
+          [pageSizeOptions]="[10, 20, 30]"
+          showFirstLastButtons
+        ></mat-paginator>
+      </div>
+    </div>
+  </fieldset>
+</div>

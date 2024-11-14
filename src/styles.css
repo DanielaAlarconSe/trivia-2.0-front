@@ -55,6 +55,7 @@ body {
   background: #1e262b !important;
   color: #ffffff !important;
   font-weight: bold !important;
+  vertical-align: middle;
 }
 
 .mat-mdc-table .mdc-data-table__row:nth-child(even) {

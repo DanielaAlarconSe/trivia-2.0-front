@@ -70,10 +70,43 @@ export class CuestionarioService {
       );
   }
 
+  obtenerCuestionarioToken(token: string): Observable<Cuestionario> {
+    return this.http
+      .get<Cuestionario>(`${this.url}/obtener-cuestionario-token/${token}`, {
+        headers: this.aggAutorizacionHeader(),
+      })
+      .pipe(
+        catchError((e) => {
+          if (this.isNoAutorizado(e)) {
+            return throwError(e);
+          }
+          return throwError(e);
+        })
+      );
+  }
+
   obtenerCuestionariosCurso(codigo: number): Observable<Cuestionario[]> {
     return this.http
       .get<Cuestionario[]>(
         `${this.url}/obtener-cuestionarios-curso/${codigo}`,
+        {
+          headers: this.aggAutorizacionHeader(),
+        }
+      )
+      .pipe(
+        catchError((e) => {
+          if (this.isNoAutorizado(e)) {
+            return throwError(e);
+          }
+          return throwError(e);
+        })
+      );
+  }
+
+  obtenerCuestionariosCursoGeneral(codigo: number): Observable<Cuestionario[]> {
+    return this.http
+      .get<Cuestionario[]>(
+        `${this.url}/obtener-cuestionarios-curso-general/${codigo}`,
         {
           headers: this.aggAutorizacionHeader(),
         }
