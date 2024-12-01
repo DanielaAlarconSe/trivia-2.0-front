@@ -49,7 +49,7 @@
         </div>
       </div>
       <div
-        *ngIf="precarga && (cuestionarios | json) == '[]'"
+        *ngIf="precarga && categoria1Cuestionarios.length === 0"
         class="row text-center"
         style="margin-top: 5%; opacity: 0.6"
       >
@@ -58,7 +58,7 @@
         </div>
       </div>
       <div
-        *ngIf="precarga && (cuestionarios | json) == '[]'"
+        *ngIf="precarga && categoria1Cuestionarios.length === 0"
         class="row text-center mt-4 mb-3"
       >
         <div class="col text-justify pl-5 pr-5 pb-5 pt-2">
@@ -93,7 +93,7 @@
           *ngFor="let cuestionario of cuestionarios; let i = index"
         >
           <div
-            *ngIf="cuestionario.estado != 0"
+            *ngIf="cuestionario.estado != 0 && cuestionario.categoriaCodigo == 1"
             class="card mx-30 cursor-select card-usco-menu"
             (click)="realizarEncuesta(cuestionario.codigo)"
             [routerLink]="['/trivia', cuestionario.codigo]"

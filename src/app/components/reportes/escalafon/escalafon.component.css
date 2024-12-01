@@ -6,3 +6,21 @@
   font-size: 16px;
   text-align: center;
 }
+
+.contenedor {
+  display: flex;
+  justify-content: center; /* Alinea el contenido al final */
+  align-items: center; /* Alineación vertical */
+  width: 100%; /* Mantiene el ancho del contenedor */
+  gap: 25%; /* Espacio entre el botón y el paginador */
+  margin-top: 10px; /* Reduce la separación superior */
+}
+
+.contenedor button {
+  font-size: 15px; /* Tamaño de texto más pequeño */
+  padding: 5px 10px; /* Reduce el relleno del botón */
+  height: auto; /* Ajusta la altura del botón */
+}
+
+
+

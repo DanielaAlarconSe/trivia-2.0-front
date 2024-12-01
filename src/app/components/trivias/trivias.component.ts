@@ -14,6 +14,7 @@ export class TriviasComponent {
   precarga: boolean = false;
   encuesta: number = 0;
   cursoCodigo!: number;
+  categoria1Cuestionarios: any[] = [];
 
   constructor(
     public cuestionarioService: CuestionarioService,
@@ -38,6 +39,15 @@ export class TriviasComponent {
       .subscribe((data) => {
         this.precarga = true;
         this.cuestionarios = data;
+        console.log(data);
+        
+        this.cuestionariosCategoria1();
       });
+  }
+
+  cuestionariosCategoria1(){
+    this.categoria1Cuestionarios = this.cuestionarios.filter(
+      cuestionario => cuestionario.categoriaCodigo === 1
+    );
   }
 }

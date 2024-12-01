@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ReporteCalificacionesExcelService } from './../../../services/reporte-calificaciones-excel.service';
 import { ResultadosReportesService } from 'src/app/services/resultados-reportes.service';
@@ -14,6 +14,8 @@ import { Calificacion } from 'src/app/models/calificacion';
 import { EscalafonPdfService } from 'src/app/services/escalafon-pdf.service';
 import { DatePipe } from '@angular/common';
 import Swal from 'sweetalert2';
+import html2canvas from 'html2canvas';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-escalafon',
@@ -51,6 +53,12 @@ export class EscalafonComponent {
   url: boolean = false;
   cuestionarioToken!: string;
 
+  cloudinaryUploadUrl =
+    'https://api.cloudinary.com/v1_1/df4xfvk4i/image/upload'; // Cambia YOUR_CLOUD_NAME
+  uploadPreset = 'ml_default'; // Cambia esto por el upload preset que configures en Cloudinary
+
+  @ViewChild('captureElement') captureElement!: ElementRef;
+
   constructor(
     public cuestionarioService: CuestionarioService,
     public resultadosReportesService: ResultadosReportesService,
@@ -61,7 +69,8 @@ export class EscalafonComponent {
     public reporteCalificacionesExcelService: ReporteCalificacionesExcelService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private escalafonPdfService: EscalafonPdfService
+    private escalafonPdfService: EscalafonPdfService,
+    private http: HttpClient
   ) {
     this.activatedRoute.params.subscribe((params) => {
       this.cuestionarioToken = params['token'];
@@ -70,14 +79,10 @@ export class EscalafonComponent {
   }
 
   obtenerCalificacion(): void {
-    console.log('ENTRA');
-
     this.resultadosReportesService
       .obtenerCalificacionesToken(this.cuestionarioToken)
       .subscribe(
         (data) => {
-          console.log(data);
-
           this.listadoCalificaciones = data;
           this.dataSource = new MatTableDataSource<Calificacion>(data);
           this.paginator.firstPage();
@@ -243,4 +248,142 @@ export class EscalafonComponent {
       this.mensajeError();
     }
   }
+
+  compartir() {
+    Swal.fire({
+      width: 600,
+      padding: '3em',
+      color: '#ffffff',
+      background: '#282828',
+      html: `
+        <button id="close-alert-btn" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 20px; color: #ffffff; cursor: pointer;">
+            &times;
+          </button>
+        <div style="border: 3px solid #00C853; border-radius: 15px; padding: 20px; text-align: center; position: relative;">
+          <h2 style="color: #00C853; margin-bottom: 15px;">Redes Sociales</h2>
+          <div style="display: flex; gap: 15px; justify-content: center; margin-top: 25px;">
+            <button id="facebook-share-btn" style="background: none; border: none; cursor: pointer;">
+              <i class="fab fa-facebook-f" style="color: #1877f2; font-size: 28px;"></i>
+            </button>
+            <button id="twitter-share-btn" style="background: none; border: none; cursor: pointer;">
+              <i class="fab fa-twitter" style="color: #1DA1F2; font-size: 28px;"></i>
+            </button>
+            <button id="linkedin-share-btn" style="background: none; border: none; cursor: pointer;">
+              <i class="fab fa-linkedin-in" style="color: #0077b5; font-size: 28px;"></i>
+            </button>
+            <button id="whatsapp-share-btn" style="background: none; border: none; cursor: pointer;">
+              <i class="fab fa-whatsapp" style="color: #25D366; font-size: 28px;"></i>
+            </button>
+          </div>
+          <img src="assets/images/login.png" alt="Logo" style="width: 250px; margin: 15px auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);" />
+        </div>
+      `,
+      showConfirmButton: false,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      allowEnterKey: false,
+      didOpen: () => {
+        const closeButton = document.getElementById('close-alert-btn');
+        if (closeButton) {
+          closeButton.addEventListener('click', () => {
+            Swal.close();
+            // Realizar cualquier acción adicional después de cerrar
+            this.router.navigate(['/inicio']);
+          });
+        }
+      },
+    });
+    
+
+    setTimeout(() => {
+      document
+        .getElementById('facebook-share-btn')
+        ?.addEventListener('click', () => this.takeScreenshotAndUpload());
+      document
+        .getElementById('twitter-share-btn')
+        ?.addEventListener('click', () =>
+          this.takeScreenshotAndUpload('twitter')
+        );
+      document
+        .getElementById('linkedin-share-btn')
+        ?.addEventListener('click', () =>
+          this.takeScreenshotAndUpload('linkedin')
+        );
+      document
+        .getElementById('whatsapp-share-btn')
+        ?.addEventListener('click', () =>
+          this.takeScreenshotAndUpload('whatsapp')
+        );
+    }, 0);
+  }
+
+  takeScreenshotAndUpload(platform?: string) {
+    setTimeout(() => {
+      if (this.captureElement) {
+        html2canvas(this.captureElement.nativeElement).then((canvas) => {
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const formData = new FormData();
+              formData.append('file', blob);
+              formData.append('upload_preset', this.uploadPreset);
+              this.http.post(this.cloudinaryUploadUrl, formData).subscribe(
+                (response: any) => {
+                  const imageUrl = response.secure_url;
+                  switch (platform) {
+                    case 'twitter': this.shareOnTwitter(imageUrl); break;
+                    case 'linkedin': this.shareOnLinkedIn(imageUrl); break;
+                    case 'whatsapp': this.shareOnWhatsApp(imageUrl); break;
+                    default: this.shareOnFacebook(imageUrl);
+                  }
+                },
+                (error) => {
+                  console.error('Error al subir la imagen a Cloudinary:', error);
+                }
+              );
+            }
+          });
+        });
+      } else {
+        console.error('Elemento para captura no encontrado.');
+      }
+    }, 500); // Ajusta el tiempo si es necesario.
+  }
+  
+
+  shareOnFacebook(imageUrl: string) {
+    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+      imageUrl
+    )}`;
+    window.open(facebookShareUrl, '_blank');
+  }
+
+  shareOnTwitter(imageUrl: string) {
+    const text = encodeURIComponent(
+      '¡He completado la trivia ' +
+      ' de Ciberseguridad en línea con éxito! 🔒🌐 Descubre mi resultado:'
+    );
+    const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+      imageUrl
+    )}&text=${text}`;
+    window.open(twitterShareUrl, '_blank');
+  }
+
+  shareOnLinkedIn(imageUrl: string) {
+    const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+      imageUrl
+    )}`;
+    window.open(linkedInShareUrl, '_blank');
+  }
+
+  shareOnWhatsApp(imageUrl: string) {
+    const message = encodeURIComponent(
+      '¡He completado la trivia ' +
+      ' de Ciberseguridad en línea con éxito! Descubre mi resultado:'
+    );
+    const whatsappShareUrl = `https://wa.me/?text=${message}%20${encodeURIComponent(
+      imageUrl
+    )}`;
+    window.open(whatsappShareUrl, '_blank');
+  }
+
 }

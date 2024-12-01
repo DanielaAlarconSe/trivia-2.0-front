@@ -136,4 +136,10 @@ export class RespuestaService {
       }
     );
   }
+
+  validarIp(): Observable<any> {
+    return this.http.get<any>(`${this.url}/validar-ip`, {
+      headers: this.aggAutorizacionHeader(),
+    });
+  }
 }

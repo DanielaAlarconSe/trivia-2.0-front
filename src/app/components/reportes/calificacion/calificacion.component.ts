@@ -35,7 +35,7 @@ export class CalificacionComponent {
   dataForExcel: any[] = [];
   dataCalificacion: any[] = [];
 
-  //Filtros
+  // Filtros
   cursoNombre!: string;
   cuestionarioNombre!: string;
 
@@ -56,6 +56,10 @@ export class CalificacionComponent {
   cuestionarioCodigo!: number;
   rutaServidor = 'http://localhost:4200/#/escalafon/';
   url: boolean = false;
+  cuestionarioSeleccionado: any;
+
+  // Nueva variable para mostrar el botón de compartir
+  mostrarBotonCompartir: boolean = false;
 
   constructor(
     public cuestionarioService: CuestionarioService,
@@ -79,24 +83,16 @@ export class CalificacionComponent {
 
   copyUrl() {
     navigator.clipboard
-      .writeText(this.rutaServidor + this.listadoCuestionarios[0].token)
+      .writeText(this.rutaServidor + this.cuestionarioSeleccionado.token)
       .then(() => {
-        // Mostrar mensaje de éxito y redirigir
-        const Toast = Swal.mixin({
+        Swal.fire({
+          icon: 'info',
+          title: 'URL copiado al portapapeles.',
           toast: true,
           position: 'top-end',
           showConfirmButton: false,
           timer: 3000,
           timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer);
-            toast.addEventListener('mouseleave', Swal.resumeTimer);
-          },
-        });
-
-        Toast.fire({
-          icon: 'info',
-          title: 'URL copiado al portapapeles.',
         });
       })
       .catch((err) => {
@@ -109,10 +105,10 @@ export class CalificacionComponent {
       .obtenerCuestionariosCursoGeneral(codigo)
       .subscribe((data) => {
         this.listadoCuestionarios = data;
-        console.log(JSON.stringify(this.listadoCuestionarios[0].token));
-
-        if (this.listadoCuestionarios[0].token != null) {
-          this.url = true;
+        // Verificar si la categoría del primer cuestionario es 3
+        if (this.listadoCuestionarios.length > 0) {
+          this.mostrarBotonCompartir =
+            this.listadoCuestionarios[0].categoriaCodigo === 3;
         }
       });
   }
@@ -125,32 +121,45 @@ export class CalificacionComponent {
         this.dataSource = new MatTableDataSource<Calificacion>(data);
         this.paginator.firstPage();
         this.dataSource.paginator = this.paginator;
+
+        // Verificar la categoría del cuestionario seleccionado
+        this.cuestionarioSeleccionado = this.listadoCuestionarios.find(
+          (cuestionario) => cuestionario.codigo === codigo
+        );
+
+        if (this.cuestionarioSeleccionado) {
+          console.log(this.cuestionarioSeleccionado, 'cuestionario selec ---');
+          
+          this.mostrarBotonCompartir =
+            this.cuestionarioSeleccionado.categoriaCodigo === 3;
+        }
+
         this.crearDatasource();
       });
   }
 
   crearDatasource() {
-    for (let index = 0; index < this.listadoCalificaciones.length; index++) {
-      let fecha = this.datePipe.transform(
-        this.listadoCalificaciones[index].fechaRegistro,
+    this.listadoCalificaciones.forEach((calificacion, index) => {
+      const fecha = this.datePipe.transform(
+        calificacion.fechaRegistro,
         'dd-MM-yyyy h:mm a'
       );
       this.dataCalificacion.push({
         N: index + 1,
-        ESTUDIANTE: this.listadoCalificaciones[index].estudianteNombre,
-        CURSO: this.listadoCalificaciones[index].cursoNombre,
-        TRIVIA: this.listadoCalificaciones[index].cuestionarioNombre,
-        CALIFICACIÓN: this.listadoCalificaciones[index].calificacion,
+        ESTUDIANTE: calificacion.estudianteNombre,
+        CURSO: calificacion.cursoNombre,
+        TRIVIA: calificacion.cuestionarioNombre,
+        CALIFICACIÓN: calificacion.calificacion,
         FECHA: fecha,
       });
-    }
+    });
   }
 
   datosCalificacionExcel() {
     this.dataCalificacion.forEach((row: any) => {
       this.dataForExcel.push(Object.values(row));
     });
-    let reportData = {
+    const reportData = {
       title: 'Reporte Calificaciones ',
       data: this.dataForExcel,
       headers: Object.keys(this.dataCalificacion[0]),
@@ -165,12 +174,6 @@ export class CalificacionComponent {
     });
   }
 
-  obtenerCuestionarios() {
-    this.cuestionarioService.obtenerCuestionarios().subscribe((data) => {
-      this.listadoCuestionarios = data;
-    });
-  }
-
   filtrar(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -182,37 +185,5 @@ export class CalificacionComponent {
 
   restaurar() {
     this.palabrasClaves = '';
-  }
-
-  mensajeSuccses() {
-    Swal.fire({
-      icon: 'success',
-      title: 'Proceso realizado',
-      text: '¡Operación exitosa!',
-      showConfirmButton: false,
-      timer: 2500,
-    });
-  }
-
-  mensajeError() {
-    Swal.fire({
-      icon: 'error',
-      title: 'Error',
-      text: 'No se pudo completar el proceso.',
-      showConfirmButton: true,
-      confirmButtonText: 'Listo',
-      confirmButtonColor: '#8f141b',
-    });
-  }
-
-  fError(er: any): void {
-    let err = er.error.error_description;
-    let arr: string[] = err.split(':');
-    if (arr[0] == 'Access token expired') {
-      this.authService.logout();
-      this.router.navigate(['login']);
-    } else {
-      this.mensajeError();
-    }
   }
 }

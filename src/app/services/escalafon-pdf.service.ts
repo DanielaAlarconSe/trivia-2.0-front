@@ -21,41 +21,25 @@ export class EscalafonPdfService {
   }
 
   hedaerBase64() {
-    // Ruta de la imagen en "assets"
     const imagePath = 'assets/images/header.jpg';
-
-    // Realiza una solicitud HTTP GET para cargar la imagen como un blob
     this.http.get(imagePath, { responseType: 'blob' }).subscribe((blob) => {
-      // Lee el blob como un ArrayBuffer
       const reader = new FileReader();
       reader.readAsDataURL(blob);
-
       reader.onloadend = () => {
-        // La imagen se ha cargado y convertido a base64
         const base64data = reader.result as string;
         this.header = base64data;
-
-        // Puedes utilizar base64data como necesites
       };
     });
   }
 
   footerBase64() {
-    // Ruta de la imagen en "assets"
     const imagePath = 'assets/images/footer.jpg';
-
-    // Realiza una solicitud HTTP GET para cargar la imagen como un blob
     this.http.get(imagePath, { responseType: 'blob' }).subscribe((blob) => {
-      // Lee el blob como un ArrayBuffer
       const reader = new FileReader();
       reader.readAsDataURL(blob);
-
       reader.onloadend = () => {
-        // La imagen se ha cargado y convertido a base64
         const base64data = reader.result as string;
         this.footer = base64data;
-
-        // Puedes utilizar base64data como necesites
       };
     });
   }
@@ -70,6 +54,7 @@ export class EscalafonPdfService {
         { text: element[index].calificacion },
       ]);
     }
+
     const docDefinition: any = {
       background: [
         {
@@ -87,44 +72,15 @@ export class EscalafonPdfService {
         width: 600,
         height: 90,
       },
-
       footer: function (
         currentPage: { toString: () => string },
         pageCount: string
       ) {
-        let dia = [
-          'lunes',
-          'martes',
-          'miércoles',
-          'jueves',
-          'viernes',
-          'sábado',
-          'domingo',
-        ];
-        let mes = [
-          'enero',
-          'febrero',
-          'marzo',
-          'abril',
-          'mayo',
-          'junio',
-          'julio',
-          'agosto',
-          'septiembre',
-          'octubre',
-          'noviembre',
-          'diciembre',
-        ];
-        let d = new Date();
-        let date =
-          ' ' +
-          dia[d.getDay() - 1] +
-          ' ' +
-          d.getDate() +
-          ' ' +
-          mes[d.getMonth()] +
-          ' ' +
-          d.getFullYear();
+        const dia = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'];
+        const mes = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+        const d = new Date();
+        const date =
+          ' ' + dia[d.getDay() - 1] + ' ' + d.getDate() + ' ' + mes[d.getMonth()] + ' ' + d.getFullYear();
         return {
           margin: [0, 0, 0, 0],
           style: 'footer',
@@ -141,8 +97,7 @@ export class EscalafonPdfService {
                 },
                 {
                   border: [false, false, false, false],
-                  text:
-                    'Pagina: ' + currentPage.toString() + ' de ' + pageCount,
+                  text: 'Página: ' + currentPage.toString() + ' de ' + pageCount,
                   fillColor: '#00181a',
                   bold: true,
                   alignment: 'right',
@@ -154,8 +109,22 @@ export class EscalafonPdfService {
       },
       content: [
         {
-          text: '',
-          style: 'subheader',
+          text: 'Reporte Escalafón de Estudiantes',
+          style: 'reportTitle',
+        },
+        {
+          canvas: [
+            {
+              type: 'line',
+              x1: 0,
+              y1: 0,
+              x2: 515, // Ancho de la página
+              y2: 0,
+              lineWidth: 1.5,
+              lineColor: '#000000',
+            },
+          ],
+          margin: [0, 10, 0, 20],
         },
         {
           style: 'tableInit',
@@ -214,6 +183,12 @@ export class EscalafonPdfService {
         },
       ],
       styles: {
+        reportTitle: {
+          fontSize: 20,
+          bold: true,
+          alignment: 'center',
+          margin: [0, 0, 0, 10],
+        },
         footer: {
           color: '#FFFFFF',
           fontSize: 10,
