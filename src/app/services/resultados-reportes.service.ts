@@ -8,6 +8,7 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { RespuestaCuestionario } from '../models/respuesta-cuestionario';
 import { Calificacion } from '../models/calificacion';
 import { ReporteAgrupadoDto } from '../dto/reporte-agrupado-dto';
+import { EmailNotificacionDto } from '../dto/email-notificacion-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -95,5 +96,9 @@ export class ResultadosReportesService {
           return throwError(e);
         })
       );
+  }
+
+  public emailNotificacionEntidad(email: EmailNotificacionDto): Observable<EmailNotificacionDto> {
+    return this.http.put<EmailNotificacionDto>(`${this.url}/email/entidad`, email);
   }
 }
