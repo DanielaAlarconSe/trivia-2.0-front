@@ -1,0 +1,7 @@
+.mat-mdc-table .mdc-data-table__header-row {
+  background-color: #d5dbdb;
+}
+
+.hide-column {
+  display: none;
+}

@@ -64,6 +64,17 @@
               <i class="fa-solid fa-user-plus"></i> Usuario
             </small>
           </a>
+          <a
+            class="pl-5 sidenav-accordion"
+            mat-list-item
+            style="width: 300px"
+            [routerLink]="['/entidad']"
+            routerLinkActive="router-link-active"
+          >
+            <small class="text-white">
+              <i class="fa-solid fa-building"></i> Entidad
+            </small>
+          </a>
         </mat-nav-list>
       </mat-expansion-panel>
     </mat-accordion>
@@ -124,6 +135,17 @@
           >
             <small class="text-white">
               <i class="fa-solid fa-circle-plus"></i> Crear trivia
+            </small>
+          </a>
+          <a
+            class="pl-5 sidenav-accordion"
+            mat-list-item
+            style="width: 300px"
+            [routerLink]="['/asignar-trivia']"
+            routerLinkActive="router-link-active"
+          >
+            <small class="text-white">
+              <i class="fa-solid fa-arrows-down-to-people"></i> Asignar trivia
             </small>
           </a>
           <a

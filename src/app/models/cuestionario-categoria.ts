@@ -1,5 +1,5 @@
 export class CuestionarioCategoria {
-    codigo!: number;
-    nombre!: string;
-    descripcion!: string;
+  codigo!: number;
+  nombre!: string;
+  descripcion!: string;
 }

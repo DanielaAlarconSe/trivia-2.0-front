@@ -20,6 +20,8 @@ import { RespuestasComponent } from './components/reportes/respuestas/respuestas
 import { TriviaPublicaComponent } from './components/trivia-publica/trivia-publica.component';
 import { TriviaCompetitivaComponent } from './components/trivia-competitiva/trivia-competitiva.component';
 import { EscalafonComponent } from './components/reportes/escalafon/escalafon.component';
+import { EntidadComponent } from './components/entidad/entidad.component';
+import { AsignacionComponent } from './components/cuestionarios/asignacion/asignacion.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'inicio' },
@@ -30,6 +32,8 @@ const routes: Routes = [
   { path: 'trivia/:codigo', component: TriviaComponent },
   { path: 'trivia-publica/:codigo', component: TriviaPublicaComponent },
   { path: 'trivia-competitiva/:token', component: TriviaCompetitivaComponent },
+
+  { path: 'asignar-trivia', component: AsignacionComponent },
 
   { path: 'inicio-sesion', component: LoginComponent },
 
@@ -60,6 +64,7 @@ const routes: Routes = [
   { path: 'panel', component: PanelComponent, canActivate: [AuthGuard] },
 
   { path: 'persona', component: PersonaComponent, canActivate: [AuthGuard] },
+  { path: 'entidad', component: EntidadComponent, canActivate: [AuthGuard] },
 
   { path: 'usuario', component: UsuarioComponent, canActivate: [AuthGuard] },
 

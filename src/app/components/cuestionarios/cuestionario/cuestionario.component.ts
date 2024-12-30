@@ -276,7 +276,7 @@ export class ModalFormularioCuestionario {
       codigo: new FormControl(''),
       nombre: new FormControl('', Validators.required),
       instrucciones: new FormControl('', Validators.required),
-      curso: new FormControl('', Validators.required),
+      curso: new FormControl(''),
       fechaInicio: new FormControl('', Validators.required),
       fechaFin: new FormControl('', Validators.required),
       categoria: new FormControl('', Validators.required),

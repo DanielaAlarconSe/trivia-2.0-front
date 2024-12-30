@@ -7,4 +7,6 @@ export class PersonaDto {
   pw!: string;
   tipoUsuarioCodigo!: number;
   tipoUsuarioNombre!: string;
+  entidadCodigo!: number;
+  entidadNombre!: string;
 }

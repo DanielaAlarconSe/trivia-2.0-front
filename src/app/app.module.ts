@@ -55,6 +55,8 @@ import { FiltroCuestionarioPipe } from './pipes/filtro-cuestionario.pipe';
 import { TriviaPublicaComponent } from './components/trivia-publica/trivia-publica.component';
 import { TriviaCompetitivaComponent } from './components/trivia-competitiva/trivia-competitiva.component';
 import { EscalafonComponent } from './components/reportes/escalafon/escalafon.component';
+import { EntidadComponent, ModalFormularioEntidad } from './components/entidad/entidad.component';
+import { AsignacionComponent, ModalFormularioAsignacion } from './components/cuestionarios/asignacion/asignacion.component';
 
 @NgModule({
   declarations: [
@@ -72,6 +74,8 @@ import { EscalafonComponent } from './components/reportes/escalafon/escalafon.co
     ModalFormularioPregunta,
     ModalFormularioRespuesta,
     ModalFormularioPreguntaRespuesta,
+    ModalFormularioEntidad,
+    ModalFormularioAsignacion,
     CursoComponent,
     UsuarioComponent,
     CuestionarioComponent,
@@ -90,6 +94,8 @@ import { EscalafonComponent } from './components/reportes/escalafon/escalafon.co
     TriviaPublicaComponent,
     TriviaCompetitivaComponent,
     EscalafonComponent,
+    EntidadComponent,
+    AsignacionComponent,
   ],
   imports: [
     BrowserModule,
@@ -110,6 +116,8 @@ import { EscalafonComponent } from './components/reportes/escalafon/escalafon.co
     ModalFormularioPregunta,
     ModalFormularioRespuesta,
     ModalFormularioPreguntaRespuesta,
+    ModalFormularioEntidad,
+    ModalFormularioAsignacion
   ],
   providers: [DatePipe, { provide: MAT_DATE_LOCALE, useValue: 'es-ES' }],
   bootstrap: [AppComponent],

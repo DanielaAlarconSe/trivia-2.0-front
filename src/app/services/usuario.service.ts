@@ -3,7 +3,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
-import { UsuarioDto } from '../dto/usuario-dto';
+import { UsuarioDto } from '../models/dto/usuario-dto';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -42,6 +42,7 @@ export class UsuarioService {
   }
 
   registrarUsuario(usuario: UsuarioDto): Observable<number> {
+    console.log('USUARIO::: ',usuario);
     return this.http.post<number>(`${this.url}/registrar-usuario`, usuario, {
       headers: this.aggAutorizacionHeader(),
     });

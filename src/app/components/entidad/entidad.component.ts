@@ -13,20 +13,16 @@ import {
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
-import { Persona } from 'src/app/models/persona';
 import { AuthService } from 'src/app/services/auth.service';
-import { PersonaService } from 'src/app/services/persona.service';
-import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
+import { Entidad } from 'src/app/models/entidad';
+import { EntidadService } from 'src/app/services/entidad.service';
 import Swal from 'sweetalert2';
-import { UbicacionService } from 'src/app/services/ubicacion.service';
-import { Pais } from 'src/app/models/pais';
-import { Observable, map, of, startWith } from 'rxjs';
 
 @Component({
-  selector: 'app-persona',
-  templateUrl: './persona.component.html',
-  styleUrls: ['./persona.component.css'],
+  selector: 'app-entidad',
+  templateUrl: './entidad.component.html',
+  styleUrls: ['./entidad.component.css'],
   providers: [
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -34,17 +30,17 @@ import { Observable, map, of, startWith } from 'rxjs';
     },
   ],
 })
-export class PersonaComponent {
-  listadoPersona: Persona[] = [];
+export class EntidadComponent {
+  listadoEntidad: Entidad[] = [];
 
-  dataSource = new MatTableDataSource<Persona>([]);
+  dataSource = new MatTableDataSource<Entidad>([]);
   displayedColumns: string[] = [
     'index',
-    'nombres',
+    'nombre',
+    'direccion',
+    'telefono',
     'email',
-    'pais',
     'fechaRegistro',
-    'estado',
     'opciones',
   ];
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
@@ -52,30 +48,28 @@ export class PersonaComponent {
   dialogRef!: MatDialogRef<any>;
   palabrasClaves!: string;
 
-  form!: FormGroup;
-
   constructor(
-    public personaService: PersonaService,
+    public entidadService: EntidadService,
     public dialog: MatDialog,
     private authService: AuthService,
     private router: Router
   ) {
     if (this.authService.validacionToken()) {
-      this.obtenerPersonas();
+      this.obtenerEntidades();
     }
   }
 
-  obtenerPersonas() {
-    this.personaService.obtenerPersonas().subscribe((data: any) => {
-      this.listadoPersona = data;
-      this.dataSource = new MatTableDataSource<Persona>(data);
+  obtenerEntidades() {
+    this.entidadService.obtenerEntidades().subscribe((data: any) => {
+      this.listadoEntidad = data;
+      this.dataSource = new MatTableDataSource<Entidad>(data);
       this.paginator.firstPage();
       this.dataSource.paginator = this.paginator;
     });
   }
 
   registrarFormulario(): void {
-    this.dialogRef = this.dialog.open(ModalFormularioPersona, {
+    this.dialogRef = this.dialog.open(ModalFormularioEntidad, {
       width: '50%',
       disableClose: true,
     });
@@ -94,15 +88,15 @@ export class PersonaComponent {
   }
 
   restaurar() {
-    this.obtenerPersonas();
+    this.obtenerEntidades();
     this.palabrasClaves = '';
   }
 
   editarFormulario(element: any): void {
-    this.dialogRef = this.dialog.open(ModalFormularioPersona, {
+    this.dialogRef = this.dialog.open(ModalFormularioEntidad, {
       width: '50%',
       disableClose: true,
-      data: { sede: element },
+      data: { entidad: element },
     });
     this.dialogRef.afterClosed().subscribe(() => {
       this.onModalClosed();
@@ -110,14 +104,14 @@ export class PersonaComponent {
   }
 
   onModalClosed() {
-    this.obtenerPersonas();
+    this.obtenerEntidades();
   }
 
-  eliminar(persona: Persona) {
-    this.personaService.actualizarPersona(persona).subscribe(
+  eliminar(entidad: Entidad) {
+    this.entidadService.eliminarEntidad(entidad).subscribe(
       (data: any) => {
         if (data > 0) {
-          this.obtenerPersonas();
+          this.obtenerEntidades();
         } else {
           this.mensajeError();
         }
@@ -126,18 +120,13 @@ export class PersonaComponent {
     );
   }
 
-  editarPersona(element: Persona) {
+  editarEntidad(element: Entidad) {
     this.editarFormulario(element);
   }
 
-  eliminarPersona(element: Persona) {
+  eliminarEntidad(element: Entidad) {
     Swal.fire({
-      title:
-        '¿Se encuentra seguro de eliminar a ' +
-        element.nombre +
-        ' ' +
-        element.apellido +
-        ' ?',
+      title: 'Está a punto de eliminar la entidad',
       text: 'La siguiente acción no podrá deshacerse.',
       icon: 'warning',
       showCancelButton: true,
@@ -195,9 +184,9 @@ export class PersonaComponent {
 //// MODAL FORMULARIO
 
 @Component({
-  selector: 'modal-formulario-persona',
-  templateUrl: './modal-formulario-persona.html',
-  styleUrls: ['./persona.component.css'],
+  selector: 'modal-formulario-entidad',
+  templateUrl: './modal-formulario-entidad.html',
+  styleUrls: ['./entidad.component.css'],
   providers: [
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -205,109 +194,60 @@ export class PersonaComponent {
     },
   ],
 })
-export class ModalFormularioPersona {
+export class ModalFormularioEntidad {
   editar: boolean = false;
-  nameFile: string = 'Archivo: pdf';
-  listadoPersona: Persona[] = [];
-  form!: FormGroup;
-  paises!: Observable<any[]>; // Ajusta el tipo según tus datos
-  pais: any[] = [];
+  formulario!: FormGroup;
 
   constructor(
-    public dialogRef: MatDialogRef<ModalFormularioPersona>,
+    public dialogRef: MatDialogRef<ModalFormularioEntidad>,
     private formBuilder: FormBuilder,
-    public personaService: PersonaService,
     public dialog: MatDialog,
     private authService: AuthService,
     private router: Router,
-    private ubicacionService: UbicacionService,
+    private entidadService: EntidadService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.authService.validacionToken()) {
-      this.crearFormPersona();
-      this.obtenerPersonas();
-      this.obtenerPaises();
+      this.crearFormulario();
       if (JSON.stringify(data) !== 'null') {
-        this.editarPersona(data.sede);
+        this.editarEntidad(data.entidad);
       }
     }
   }
 
-  ngOnInit() {
-    this.form
-      .get('pais')
-      ?.valueChanges.pipe(
-        startWith(''),
-        map((value) => (typeof value === 'string' ? value : value?.nombre)),
-        map((name) => (name ? this.filterPais(name) : this.pais.slice()))
-      )
-      .subscribe((filteredPaises) => {
-        this.paises = of(filteredPaises);
-      });
-  }
+  ngOnInit() {}
 
-  private crearFormPersona(): void {
-    this.form = this.formBuilder.group({
+  private crearFormulario(): void {
+    this.formulario = this.formBuilder.group({
       codigo: new FormControl(''),
-      // DATOS PERSONALES
       nombre: new FormControl('', Validators.required),
-      apellido: new FormControl('', Validators.required),
-      // DATOS DE CONTACTO
-      pais: new FormControl('', Validators.required),
-      correoPersonal: new FormControl('', [Validators.required, Validators.email]),
+      direccion: new FormControl('', Validators.required),
+      telefono: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      fechaRegistro: new FormControl(''),
       estado: new FormControl(''),
     });
   }
 
-  obtenerPaises(): void {
-    this.ubicacionService.obtenerPaises().subscribe((data) => {
-      this.pais = data;
-    });
-  }
-
-  filterPais(name: string): any[] {
-    const filterValue = name.toLowerCase();
-    return this.pais.filter((option) =>
-      option.nombre.toLowerCase().includes(filterValue)
-    );
-  }
-
-  displayFn(pais: any): string {
-    return pais && pais.nombre ? pais.nombre : '';
-  }
-
-  generarPersona(): void {
-    let persona: Persona = new Persona();
-    persona.codigo = this.form.get('codigo')!.value;
-    persona.nombre = this.form.get('nombre')!.value;
-    persona.apellido = this.form.get('apellido')!.value;
-
-    //DATOS DE CONTACTO
-    persona.paisResidencia = this.form.get('pais')!.value;
-    persona.correo = this.form.get('correoPersonal')!.value;
-
-    persona.estado = this.form.get('estado')!.value;
-
+  generarEntidad(): void {
+    let entidad: Entidad = new Entidad();
+    entidad.codigo = this.formulario.get('codigo')!.value;
+    entidad.nombre = this.formulario.get('nombre')!.value;
+    entidad.direccion = this.formulario.get('direccion')!.value;
+    entidad.telefono = this.formulario.get('telefono')!.value;
+    entidad.email = this.formulario.get('email')!.value;
+    entidad.fechaRegistro = this.formulario.get('fechaRegistro')!.value;
+    entidad.estado = this.formulario.get('estado')!.value;
 
     if (this.editar) {
-      this.actualizarPersona(persona);
+      this.actualizarEntidad(entidad);
     } else {
-      this.registrarPersona(persona);
+      this.registrarEntidad(entidad);
     }
   }
 
-  registrarPersona(persona: Persona) {
-    const paisSeleccionado = this.form.get('pais')?.value;
-    const codigoPais = paisSeleccionado.codigo;
-
-    let d = new Persona();
-    d.codigo = persona.codigo;
-    d.nombre = persona.nombre;
-    d.apellido = persona.apellido;
-    d.correo = persona.correo;
-    d.paisResidencia = codigoPais;
-
-    this.personaService.registrarPersona(d).subscribe(
+  registrarEntidad(entidad: Entidad) {
+    this.entidadService.registrarEntidad(entidad).subscribe(
       (data) => {
         if (data > 0) {
           Swal.fire({
@@ -319,7 +259,7 @@ export class ModalFormularioPersona {
           });
           this.dialogRef.close();
           this.cancelar();
-          this.crearFormPersona();
+          this.crearFormulario();
         } else {
           this.mensajeError();
         }
@@ -328,19 +268,8 @@ export class ModalFormularioPersona {
     );
   }
 
-  actualizarPersona(persona: Persona) {
-
-    const paisSeleccionado = this.form.get('pais')?.value;
-    const codigoPais = paisSeleccionado.codigo;
-
-    let d = new Persona();
-    d.codigo = persona.codigo;
-    d.nombre = persona.nombre;
-    d.apellido = persona.apellido;
-    d.correo = persona.correo;
-    d.paisResidencia = codigoPais;
-
-    this.personaService.actualizarPersona(d).subscribe(
+  actualizarEntidad(entidad: Entidad) {
+    this.entidadService.actualizarEntidad(entidad).subscribe(
       (data) => {
         if (data > 0) {
           Swal.fire({
@@ -359,37 +288,22 @@ export class ModalFormularioPersona {
     );
   }
 
-  editarPersona(element: Persona) {
+  editarEntidad(element: Entidad) {
     this.editar = true;
-    this.form.get('nombre')!.setValue(element.nombre);
-    this.form.get('apellido')!.setValue(element.apellido);
-    this.form.get('pais')!.setValue(element.paisResidencia);
-    this.form.get('correoPersonal')!.setValue(element.correo);
-    this.form.get('codigo')!.setValue(element.codigo);
-  }
-
-  eliminarPersona() {
-    let persona: Persona = new Persona();
-    persona.codigo = this.form.get('codigo')!.value;
-    persona.nombre = this.form.get('nombre')!.value;
-    persona.apellido = this.form.get('apellido')!.value;
-    //DATOS DE CONTACTO
-    persona.paisResidencia = this.form.get('pais')!.value;
-    persona.correo = this.form.get('correoPersonal')!.value;
-    this.actualizarPersona(persona);
+    this.formulario.get('codigo')!.setValue(element.codigo);
+    this.formulario.get('nombre')!.setValue(element.nombre);
+    this.formulario.get('direccion')!.setValue(element.direccion);
+    this.formulario.get('telefono')!.setValue(element.telefono);
+    this.formulario.get('email')!.setValue(element.email);
+    this.formulario.get('fechaRegistro')!.setValue(element.fechaRegistro);
+    this.formulario.get('estado')!.setValue(element.estado);
   }
 
   cancelar() {
-    this.form.reset();
-    this.crearFormPersona();
+    this.formulario.reset();
+    this.crearFormulario();
     this.editar = false;
     this.dialogRef.close();
-  }
-
-  obtenerPersonas() {
-    this.personaService.obtenerPersonas().subscribe((data) => {
-      this.listadoPersona = data;
-    });
   }
 
   mensajeSuccses() {
@@ -428,6 +342,6 @@ export class ModalFormularioPersona {
     const inputElement = event.target as HTMLInputElement;
     const uppercaseValue = inputElement.value.toUpperCase();
     inputElement.value = uppercaseValue;
-    this.form.get(controlName)?.setValue(uppercaseValue);
+    this.formulario.get(controlName)?.setValue(uppercaseValue);
   }
 }

@@ -66,6 +66,24 @@
                 </mat-form-field>
               </div>
             </div>
+            <div class="col" *ngIf="form.get('tipo')!.value == 4">
+              <div class="form-group">
+                <label for="opciones">Entidad: </label>
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-select
+                    class="font-sm-corhuila"
+                    formControlName="entidad"
+                    placeholder="Seleccione la entidad"
+                  >
+                    <mat-option
+                      *ngFor="let entidad of listadoEntidades"
+                      [value]="entidad.codigo"
+                      >{{ entidad.nombre }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
           </div>
         </fieldset>
       </form>
@@ -73,7 +91,7 @@
   </div>
   <div class="row text-right">
     <div class="col">
-      <button class="btn btn-danger ml-3" mat-dialog-close (click)="cancelar()">
+      <button class="btn btn-danger ml-3" mat-dialog-close>
         <i class="fa-solid fa-xmark"></i> Cancelar
       </button>
       <button

@@ -38,7 +38,7 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="col">
+            <div class="col" *ngIf="formulario.get('categoria')!.value !== 2">
               <div class="form-group">
                 <label>Curso: <span class="requerido"> * </span></label>
                 <mat-form-field class="example-full-width" appearance="fill">

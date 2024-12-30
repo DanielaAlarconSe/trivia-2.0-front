@@ -12,7 +12,7 @@ import { CuestionarioService } from 'src/app/services/cuestionario.service';
 import { Curso } from 'src/app/models/curso';
 import { Calificacion } from 'src/app/models/calificacion';
 import { Pregunta } from 'src/app/models/pregunta';
-import { ReporteAgrupadoDto } from 'src/app/dto/reporte-agrupado-dto';
+import { ReporteAgrupadoDto } from 'src/app/models/dto/reporte-agrupado-dto';
 
 @Component({
   selector: 'app-respuestas',

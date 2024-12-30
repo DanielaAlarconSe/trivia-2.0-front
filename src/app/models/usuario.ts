@@ -6,4 +6,6 @@ export class Usuario {
   nombre!: string;
   apellido!: string;
   rol!: number;
+  entidadCodigo!: number;
+  entidadNombre!: string;
 }

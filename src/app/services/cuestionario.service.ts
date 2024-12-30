@@ -55,6 +55,21 @@ export class CuestionarioService {
       );
   }
 
+  obtenerCuestionariosAspirantes(): Observable<Cuestionario[]> {
+    return this.http
+      .get<Cuestionario[]>(`${this.url}/obtener-cuestionario-aspirantes`, {
+        headers: this.aggAutorizacionHeader(),
+      })
+      .pipe(
+        catchError((e) => {
+          if (this.isNoAutorizado(e)) {
+            return throwError(e);
+          }
+          return throwError(e);
+        })
+      );
+  }
+
   obtenerCuestionario(codigo: number): Observable<Cuestionario[]> {
     return this.http
       .get<Cuestionario[]>(`${this.url}/obtener-cuestionario/${codigo}`, {

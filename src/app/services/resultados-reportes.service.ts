@@ -7,8 +7,8 @@ import { AuthService } from './auth.service';
 import { Observable, catchError, throwError } from 'rxjs';
 import { RespuestaCuestionario } from '../models/respuesta-cuestionario';
 import { Calificacion } from '../models/calificacion';
-import { ReporteAgrupadoDto } from '../dto/reporte-agrupado-dto';
-import { EmailNotificacionDto } from '../dto/email-notificacion-dto';
+import { ReporteAgrupadoDto } from '../models/dto/reporte-agrupado-dto';
+import { EmailNotificacionDto } from '../models/dto/email-notificacion-dto';
 
 @Injectable({
   providedIn: 'root',

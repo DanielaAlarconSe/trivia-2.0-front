@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
-import { EmailNotificacionDto } from '../dto/email-notificacion-dto';
+import { EmailNotificacionDto } from '../models/dto/email-notificacion-dto';
 import { Observable } from 'rxjs';
 
 @Injectable({
