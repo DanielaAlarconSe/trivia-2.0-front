@@ -4,5 +4,6 @@ export class UsuarioDto {
   contrasena!: string;
   tipo!: number;
   entidad!: number;
+  token!: string;
   estado!: number;
 }

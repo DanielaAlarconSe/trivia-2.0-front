@@ -159,6 +159,7 @@ export class ModalFormularioUsuario {
   form!: FormGroup;
   usuarioTipo: UsuarioTipo[] = [];
   hide = true;
+  claveGenerada: string | null = null;
 
   constructor(
     public dialogRef: MatDialogRef<ModalFormularioUsuario>,
@@ -201,6 +202,27 @@ export class ModalFormularioUsuario {
     });
   }
 
+  onUserTypeChange(tipo: number): void {
+    if (tipo === 4) { // Código para "ASPIRANTE"
+      this.claveGenerada = this.generarClave();
+      this.form.get('contrasena')!.setValue(this.claveGenerada);
+      console.log('Clave generada:', this.claveGenerada); // Opcional: Para depuración
+    } else {
+      this.claveGenerada = null;
+    }
+  }
+
+  private generarClave(): string {
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const longitud = 25;
+    let clave = '';
+    for (let i = 0; i < longitud; i++) {
+      const indiceAleatorio = Math.floor(Math.random() * caracteres.length);
+      clave += caracteres[indiceAleatorio];
+    }
+    return clave;
+  }
+
   obtenerEntidades() {
     this.entidadService.obtenerEntidades().subscribe((data) => {
       this.listadoEntidades = data;
@@ -217,8 +239,13 @@ export class ModalFormularioUsuario {
     let usuario: UsuarioDto = new UsuarioDto();
     usuario.codigo = this.data.usuario.codigo;
     usuario.usuario = this.data.usuario.correo;
-    usuario.contrasena = this.form.get('contrasena')!.value;
     usuario.tipo = this.form.get('tipo')!.value;
+    if( this.form.get('tipo')!.value === 4){
+      usuario.contrasena = this.claveGenerada+'';
+      usuario.token = this.claveGenerada+'';
+    }else{
+      usuario.contrasena = this.form.get('contrasena')!.value;
+    }
     usuario.entidad = this.form.get('entidad')!.value;
 
     if (this.editar) {

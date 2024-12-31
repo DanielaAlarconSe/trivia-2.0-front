@@ -85,7 +85,7 @@ export class AsignacionComponent {
     email.aspiranteNombre =
       element.personaNombre + ' ' + element.personaApellido;
     email.usuario = element.personaEmail;
-    email.clave = element.personaEmail;
+    email.clave = element.personaToken;
     email.entidadNombre = element.entidadNombre;
     const formatFecha = (fecha: string | Date): string => {
       // Asegurar que sea una instancia de Date

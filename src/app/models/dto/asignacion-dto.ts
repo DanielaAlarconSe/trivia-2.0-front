@@ -4,6 +4,7 @@ export class AsignacionDto {
   personaNombre!: string;
   personaApellido!: string;
   personaEmail!: string;
+  personaToken!: string;
   entidadCodigo!: number;
   entidadNombre!: string;
   entidadEmail!: string;

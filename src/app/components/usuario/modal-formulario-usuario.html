@@ -20,6 +20,29 @@
             </div>
             <div class="col">
               <div class="form-group">
+                <label for="opciones"
+                  >Tipo de Usuario: <span class="requerido"> * </span></label
+                >
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <mat-select
+                    class="font-sm-corhuila"
+                    formControlName="tipo"
+                    placeholder="Seleccione un perfil"
+                     (selectionChange)="onUserTypeChange($event.value)"
+                  >
+                    <mat-option
+                      *ngFor="let option of usuarioTipo"
+                      [value]="option.codigo"
+                      >{{ option.nombre }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col" *ngIf="form.get('tipo')!.value !== 4">
+              <div class="form-group">
                 <label for="contrasena"
                   >Contraseña: <span class="requerido"> * </span></label
                 >
@@ -44,25 +67,19 @@
                 </mat-form-field>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col">
+            <div class="col" *ngIf="form.get('tipo')!.value == 4">
               <div class="form-group">
-                <label for="opciones"
-                  >Tipo de Usuario: <span class="requerido"> * </span></label
+                <label for="contrasena"
+                  >Contraseña: <span class="requerido"> * </span></label
                 >
                 <mat-form-field class="example-full-width" appearance="fill">
-                  <mat-select
-                    class="font-sm-corhuila"
-                    formControlName="tipo"
-                    placeholder="Seleccione un perfil"
-                  >
-                    <mat-option
-                      *ngFor="let option of usuarioTipo"
-                      [value]="option.codigo"
-                      >{{ option.nombre }}</mat-option
-                    >
-                  </mat-select>
+                  <input
+                    autocomplete="off"
+                    matInput
+                    type="password"
+                    formControlName="contrasena"
+                    readonly
+                  />
                 </mat-form-field>
               </div>
             </div>
