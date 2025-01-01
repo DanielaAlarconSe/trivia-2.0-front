@@ -121,8 +121,11 @@ export class AuthService {
     //  let helper = new JwtHelperService();
     // let datos = helper.decodeToken(accessToken);
     this.usuario = new Usuario();
-    this.usuario.username = datos.username;
+    this.usuario.codigo = datos.usuarioCodigo;
+    this.usuario.personaCodigo = datos.personaCodigo;
     this.usuario.nombre = datos.nombre;
+    this.usuario.tipoUsuarioCodigo = datos.tipoUsuarioCodigo;
+    this.usuario.tipoUsuarioNombre = datos.tipoUsuarioNombre;
     this.usuario.apellido = datos.apellido;
     this.usuario.rol = datos.role;
 

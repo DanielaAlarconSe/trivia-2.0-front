@@ -60,6 +60,21 @@ export class AsginacionService {
       );
   }
 
+  obtenerAspirante(codigo: number): Observable<AsignacionDto[]> {
+    return this.http
+      .get<AsignacionDto[]>(`${this.url}/obtener-aspirante/${codigo}`, {
+        headers: this.aggAutorizacionHeader(),
+      })
+      .pipe(
+        catchError((e) => {
+          if (this.isNoAutorizado(e)) {
+            return throwError(e);
+          }
+          return throwError(e);
+        })
+      );
+  }
+
   registrarAsignacionTrivia(asignacion: AsignacionTrivia): Observable<number> {
     return this.http.post<number>(
       `${this.url}/registrar-asignacion`,

@@ -22,6 +22,7 @@ import { TriviaCompetitivaComponent } from './components/trivia-competitiva/triv
 import { EscalafonComponent } from './components/reportes/escalafon/escalafon.component';
 import { EntidadComponent } from './components/entidad/entidad.component';
 import { AsignacionComponent } from './components/cuestionarios/asignacion/asignacion.component';
+import { TriviaDiagnosticaComponent } from './components/trivia-diagnostica/trivia-diagnostica.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'inicio' },
@@ -32,12 +33,14 @@ const routes: Routes = [
   { path: 'trivia/:codigo', component: TriviaComponent },
   { path: 'trivia-publica/:codigo', component: TriviaPublicaComponent },
   { path: 'trivia-competitiva/:token', component: TriviaCompetitivaComponent },
+  { path: 'trivia-diagnostica/:token', component: TriviaDiagnosticaComponent },
 
   { path: 'asignar-trivia', component: AsignacionComponent },
 
   { path: 'inicio-sesion', component: LoginComponent },
 
   { path: 'escalafon/:token', component: EscalafonComponent },
+
 
   {
     path: 'cuestionario',

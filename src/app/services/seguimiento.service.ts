@@ -44,4 +44,8 @@ export class SeguimientoService {
   public emailNotificacionAspirante(email: EmailNotificacionDto): Observable<EmailNotificacionDto> {
     return this.http.put<EmailNotificacionDto>(`${this.url}/email/aspirante`, email);
   }
+
+  public emailNotificacionEntidad(email: EmailNotificacionDto): Observable<EmailNotificacionDto> {
+    return this.http.put<EmailNotificacionDto>(`${this.url}/email/entidad`, email);
+  }
 }

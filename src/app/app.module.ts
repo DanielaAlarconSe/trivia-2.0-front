@@ -57,6 +57,8 @@ import { TriviaCompetitivaComponent } from './components/trivia-competitiva/triv
 import { EscalafonComponent } from './components/reportes/escalafon/escalafon.component';
 import { EntidadComponent, ModalFormularioEntidad } from './components/entidad/entidad.component';
 import { AsignacionComponent, ModalFormularioAsignacion } from './components/cuestionarios/asignacion/asignacion.component';
+import { TriviaDiagnosticaComponent } from './components/trivia-diagnostica/trivia-diagnostica.component';
+import { LoginDiagnosticoComponent } from './components/login-diagnostico/login-diagnostico.component';
 
 @NgModule({
   declarations: [
@@ -96,6 +98,8 @@ import { AsignacionComponent, ModalFormularioAsignacion } from './components/cue
     EscalafonComponent,
     EntidadComponent,
     AsignacionComponent,
+    TriviaDiagnosticaComponent,
+    LoginDiagnosticoComponent,
   ],
   imports: [
     BrowserModule,

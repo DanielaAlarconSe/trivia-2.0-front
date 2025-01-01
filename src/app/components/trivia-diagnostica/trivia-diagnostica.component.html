@@ -1,0 +1,160 @@
+<app-navbar></app-navbar>
+<div class="container text-center">
+  <div class="container mt-5">
+    <div
+      class="row prev-header-encuesta-usco mt-2 mb-3 shadow"
+      *ngIf="cuestionario"
+    >
+      <div class="col">
+        <div
+          class="row border-round-usco pl-5 pr-5 pb-3 pt-4"
+          id="carnet-usco-rotulo-front"
+        >
+          <div class="col text-center font-usco-gr mt-2">
+            <div class="row">
+              <div class="col">
+                <img style="width: 40%" src="assets/images/encuesta.png" />
+                <hr class="dashed" />
+                <h4 class="font-usco-default text-left font-usco-gr-d6">
+                  {{ cuestionario.nombre }}
+                </h4>
+                <h6 class="font-usco-default mt-3 text-left">
+                  <span class="font-usco-gr-d6"
+                    ><i class="fa-solid fa-user"></i> Dirigida a aspirantes de la entidad:
+                    {{ aspirante.entidadNombre }}
+                  </span>
+                </h6>
+                <h6 class="font-usco-default mt-3 text-left font-usco-gr-d6">
+                  <i class="fa-solid fa-circle-info"></i> Instrucciones.
+                </h6>
+                <p class="text-justify">{{ cuestionario.instrucciones }}</p>
+              </div>
+            </div>
+            <form [formGroup]="formularioEstudiante">
+              <div class="row mt-2 text-left">
+                <div class="col">
+                  <div class="form-group">
+                    <label
+                      >Nombre del aspirante:
+                      <span class="requerido"> * </span></label
+                    >
+                    <mat-form-field
+                      class="example-full-width"
+                      appearance="fill"
+                    >
+                      <input
+                        matInput
+                        required
+                        placeholder="Nombre completo"
+                        formControlName="nombre"
+                        readonly
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="formulario">
+      <div class="col mt-3">
+        <form [formGroup]="formulario">
+          <div
+            class="row"
+            *ngFor="let pregunta of listadoPreguntas; let i = index"
+          >
+            <div class="col">
+              <div
+                class="row prev-header-encuesta-usco mb-3 shadow"
+                style="background-color: white"
+                *ngIf="pregunta.tipoRespuestaCodigo == 1"
+              >
+                <div class="col pl-5 pr-5 pt-4 pb-3 text-left">
+                  <label
+                    id="example-radio-group-label"
+                    class="font-usco-default font-usco-gr font-weight-bold"
+                    >{{ i + 1 }}). {{ pregunta.nombre }}</label
+                  ><br />
+                  <mat-radio-group
+                    formControlName="respuesta{{ pregunta.codigo }}"
+                    id="respuesta{{ pregunta.codigo }}"
+                    aria-labelledby="example-radio-group-label"
+                    class="example-radio-group"
+                  >
+                    <mat-radio-button
+                      class="example-radio-button"
+                      style="
+                        margin-top: 0;
+                        margin-bottom: 0;
+                        padding-top: 0;
+                        padding-bottom: 0;
+                      "
+                      *ngFor="
+                        let opcion of listadoPreguntaRespuestas[pregunta.codigo]
+                      "
+                      [value]="opcion.codigo"
+                    >
+                      {{ opcion.respuestaOpcionNombre }}
+                    </mat-radio-button>
+                  </mat-radio-group>
+                  <small>{{ pregunta.textoAdicional }}</small>
+                </div>
+              </div>
+              <div
+                class="row prev-header-encuesta-usco mb-3 shadow"
+                style="background-color: white"
+                *ngIf="pregunta.tipoRespuestaCodigo == 2"
+              >
+                <div class="col pl-5 pr-5 pt-4 pb-3">
+                  <div class="form-group text-left">
+                    <small
+                      class="font-usco-gr font-usco-default font-weight-bold"
+                      style="font-size: 16px"
+                      >{{ i + 1 }}). {{ pregunta.nombre }}</small
+                    ><br />
+                    <mat-form-field
+                      class="example-full-width mt-3"
+                      appearance="outline"
+                    >
+                      <mat-label>Selecciones una opción</mat-label>
+                      <mat-select
+                        formControlName="respuesta{{ pregunta.codigo }}"
+                        id="respuesta{{ pregunta.codigo }}"
+                      >
+                        <mat-option
+                          *ngFor="
+                            let opcion of listadoPreguntaRespuestas[
+                              pregunta.codigo
+                            ]
+                          "
+                          [value]="opcion.codigo"
+                        >
+                          {{ opcion.respuestaOpcionNombre }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-hint>{{ pregunta.textoAdicional }}</mat-hint>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col">
+              <button
+                class="btn btn-ciber-v btn-lg"
+                [disabled]="!formulario.valid"
+                (click)="generarEstudiante()"
+              >
+                Enviar
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <br /><br />
+</div>

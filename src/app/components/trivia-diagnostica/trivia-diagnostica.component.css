@@ -1,0 +1,65 @@
+.example-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+  align-items: flex-start;
+}
+
+.example-radio-button {
+  margin: 5px;
+}
+
+.dashed {
+  border-bottom: dashed 1px #4d626c;
+}
+
+:host
+  ::ng-deep
+  .mat-slide-toggle.mat-checked:not(.mat-disabled)
+  .mat-slide-toggle-bar {
+  background-color: #b15b60;
+}
+
+:host
+  ::ng-deep
+  .mat-slide-toggle.mat-checked:not(.mat-disabled)
+  .mat-slide-toggle-thumb {
+  background-color: #8f141b;
+}
+
+.foto-usco {
+  border: solid 5px white;
+  border-radius: 5px;
+}
+
+.no-border {
+  border: none;
+}
+
+.font-small-usco {
+  font-size: 11px;
+}
+
+.prev-header-encuesta-usco {
+  border: solid 1px #dadce0;
+  border-radius: 10px 10px 10px 10px;
+}
+
+.precarga-img-usco {
+  margin-top: 5%;
+  opacity: 0.6;
+}
+
+#carnet-usco-rotulo-front {
+  background-image: linear-gradient(
+    to bottom,
+    green 0,
+    green 5%,
+    #ffffff 5%,
+    #ffffff 100%
+  );
+}
+
+.border-round-usco {
+  border-radius: 10px 10px 10px 10px;
+}

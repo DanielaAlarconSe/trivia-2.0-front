@@ -80,7 +80,12 @@ export class LoginComponent {
           icon: 'success',
           title: 'Sesión iniciada correctamente',
         });
-        this.router.navigate(['/panel']);
+        console.log(this.authService.user);
+        if(this.authService.user.tipoUsuarioCodigo === 1 || this.authService.user.tipoUsuarioCodigo === 2){
+          this.router.navigate(['/panel']);
+        }else{
+          this.router.navigate(['/trivia-diagnostica','a7f941c803da46cda775b7e71170a942']);
+        }
       },
       (err) => this.fError(err)
     );
