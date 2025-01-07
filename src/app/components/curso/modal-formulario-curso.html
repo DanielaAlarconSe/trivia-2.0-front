@@ -13,7 +13,7 @@
                 <label
                   >Nombre del curso: <span class="requerido"> * </span></label
                 >
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="example-full-width" appearance="outline">
                   <input
                     matInput
                     formControlName="nombre"
@@ -28,7 +28,7 @@
             <div class="col">
               <div class="form-group">
                 <label>Instructor: <span class="requerido"> * </span></label>
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="example-full-width" appearance="outline">
                   <mat-select formControlName="instructor">
                     <mat-option
                       *ngFor="let opcion of listadoInstructores"
@@ -45,7 +45,7 @@
             <div class="col">
               <div class="form-group">
                 <label>Descripción: <span class="requerido"> * </span></label>
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="example-full-width" appearance="outline">
                   <textarea
                     rows="4"
                     matInput

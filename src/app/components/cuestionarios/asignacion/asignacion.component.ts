@@ -1,8 +1,11 @@
 import { Component, Inject, ViewChild } from '@angular/core';
 import {
+  AbstractControl,
   FormBuilder,
   FormControl,
   FormGroup,
+  ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import {
@@ -102,8 +105,14 @@ export class AsignacionComponent {
         hour12: true,
       };
 
-      const fechaFormateada: string = fechaObj.toLocaleDateString('es-ES', opcionesFecha);
-      const horaFormateada: string = fechaObj.toLocaleTimeString('es-ES', opcionesHora);
+      const fechaFormateada: string = fechaObj.toLocaleDateString(
+        'es-ES',
+        opcionesFecha
+      );
+      const horaFormateada: string = fechaObj.toLocaleTimeString(
+        'es-ES',
+        opcionesHora
+      );
 
       return `${fechaFormateada} ${horaFormateada}`;
     };
@@ -117,6 +126,14 @@ export class AsignacionComponent {
       .emailNotificacionAspirante(email)
       .subscribe((data) => {
         console.log(data);
+        let seguimiento: AsignacionTrivia = new AsignacionTrivia();
+        seguimiento.codigo = element.asignacionCodigo;
+        seguimiento.seguimiento = 2;
+        this.seguimientoService
+          .actualizarSeguimiento(seguimiento)
+          .subscribe((data) => {
+            this.actualizarAsignacion(element);
+          });
       });
   }
 
@@ -342,6 +359,46 @@ export class ModalFormularioAsignacion {
       fechaFin: new FormControl('', Validators.required),
       estado: new FormControl(''),
     });
+
+    // Escuchar cambios en el campo 'cuestionario' para aplicar validación personalizada
+    this.formulario
+      .get('cuestionario')
+      ?.valueChanges.subscribe((cuestionarioCodigo: number) => {
+        const cuestionario = this.listadoCuestionarios.find(
+          (c) => c.codigo === cuestionarioCodigo
+        );
+        if (cuestionario) {
+          this.formulario.setValidators(this.validarRangoFechas(cuestionario));
+          this.formulario.updateValueAndValidity();
+        }
+      });
+  }
+
+  validarRangoFechas(cuestionario: Cuestionario): ValidatorFn {
+    return (formGroup: AbstractControl): ValidationErrors | null => {
+      const fechaInicioControl = formGroup.get('fechaInicio');
+      const fechaFinControl = formGroup.get('fechaFin');
+      if (!fechaInicioControl || !fechaFinControl || !cuestionario) {
+        return null;
+      }
+
+      const fechaInicio = new Date(fechaInicioControl.value);
+      const fechaFin = new Date(fechaFinControl.value);
+      const cuestionarioInicio = new Date(cuestionario.fechaInicio);
+      const cuestionarioFin = new Date(cuestionario.fechaFin);
+
+      // Validar que las fechas estén dentro del rango del cuestionario
+      if (fechaInicio < cuestionarioInicio || fechaFin > cuestionarioFin) {
+        return { rangoFechasInvalido: true };
+      }
+
+      // Validar que la fecha de inicio no sea mayor que la fecha de fin
+      if (fechaInicio > fechaFin) {
+        return { fechasDesordenadas: true };
+      }
+
+      return null;
+    };
   }
 
   generarEntidad(): void {

@@ -1,7 +1,7 @@
 <app-admin-navbar>
   <div class="pl-4 pr-4 pb-4 text-center">
     <div class="card shadow-sm mt-3">
-      <div class="card-header text-center" style="background-color: #d5dbdb">
+      <div class="card-header text-center" style="background-color: #98b5b57b">
         <h4 class="mt-2">Asignar Trivia Aspirante</h4>
       </div>
       <div class="card-body">
@@ -68,7 +68,9 @@
               <ng-container matColumnDef="seguimiento">
                 <th mat-header-cell *matHeaderCellDef>Seguimiento</th>
                 <td mat-cell *matCellDef="let element">
-                  {{ element.seguimientoNombre }}
+                  <span class="alert alert-warning pt-2" *ngIf="element.seguimientoCodigo == 1">{{ element.seguimientoNombre }}</span>
+                  <span class="alert alert-info pt-2" *ngIf="element.seguimientoCodigo == 2">{{ element.seguimientoNombre }}</span>
+                  <span class="alert alert-success pt-2" *ngIf="element.seguimientoCodigo == 3">{{ element.seguimientoNombre }}</span>
                 </td>
               </ng-container>
               <ng-container matColumnDef="fechaInicio">

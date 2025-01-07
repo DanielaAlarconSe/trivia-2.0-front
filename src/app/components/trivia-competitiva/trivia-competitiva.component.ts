@@ -104,8 +104,8 @@ export class TriviaCompetitivaComponent implements OnInit {
   shareOnTwitter(imageUrl: string) {
     const text = encodeURIComponent(
       '¡He completado la trivia ' +
-      this.cuestionario.nombre +
-      ' de Ciberseguridad en línea con éxito! 🔒🌐 Descubre mi resultado:'
+        this.cuestionario.nombre +
+        ' de Ciberseguridad en línea con éxito! 🔒🌐 Descubre mi resultado:'
     );
     const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
       imageUrl
@@ -123,8 +123,8 @@ export class TriviaCompetitivaComponent implements OnInit {
   shareOnWhatsApp(imageUrl: string) {
     const message = encodeURIComponent(
       '¡He completado la trivia ' +
-      this.cuestionario.nombre +
-      ' de Ciberseguridad en línea con éxito! Descubre mi resultado:'
+        this.cuestionario.nombre +
+        ' de Ciberseguridad en línea con éxito! Descubre mi resultado:'
     );
     const whatsappShareUrl = `https://wa.me/?text=${message}%20${encodeURIComponent(
       imageUrl
@@ -154,9 +154,21 @@ export class TriviaCompetitivaComponent implements OnInit {
       .obtenerCuestionarioToken(this.cuestionarioToken)
       .subscribe(
         (data) => {
-          if (JSON.stringify(data) != '[]') {
+          if (data != null) {
             this.cuestionario = data;
             this.listarPreguntasCuestionario();
+          } else {
+            Swal.fire({
+              icon: 'warning',
+              title: 'Advertencia',
+              timer: 8000, // Tiempo en milisegundos (5 segundos)
+              timerProgressBar: true,
+              showConfirmButton: false,
+              text: 'No se puede obtener la trivia. Por favor, revise los tiempos asignados.',
+            }).then(() => {
+              // Redirigir a la URL cuando el temporizador termina
+              this.router.navigate(['/inicio']);
+            });
           }
         },
         (error) => {
@@ -177,8 +189,7 @@ export class TriviaCompetitivaComponent implements OnInit {
   }
 
   generarEstudiante(): void {
-    this.respuestaService.validarIp().subscribe(data => {
-
+    this.respuestaService.validarIp().subscribe((data) => {
       if (data == false) {
         let respuestaCuestionario: RespuestaCuestionario =
           new RespuestaCuestionario();
@@ -197,8 +208,7 @@ export class TriviaCompetitivaComponent implements OnInit {
         });
         this.router.navigate(['/inicio']);
       }
-    })
-
+    });
   }
 
   registrarEstudiante(respuestaCuestionario: RespuestaCuestionario) {
@@ -335,8 +345,9 @@ export class TriviaCompetitivaComponent implements OnInit {
           background: '#282828',
           html: `
               <div style="border: 3px solid #00C853; border-radius: 15px; padding: 20px; text-align: center;">
-                <h2 style="color: #00C853; margin-bottom: 15px;">¡Felicidades, ${this.formularioEstudiante.get('nombre')!.value
-            }!</h2>
+                <h2 style="color: #00C853; margin-bottom: 15px;">¡Felicidades, ${
+                  this.formularioEstudiante.get('nombre')!.value
+                }!</h2>
                 <p style="font-size: 18px; color: #e0e0e0; margin-bottom: 20px;">Tu calificación final es:</p>
                 <h1 style="color: #00C853; font-size: 42px; margin: 0 0 15px;">${calificacionTotal} puntos</h1>
                 <img src="assets/images/login.png" alt="Logo" style="width: 250px; margin: 15px auto; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);" />

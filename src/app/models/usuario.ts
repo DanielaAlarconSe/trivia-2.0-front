@@ -7,8 +7,8 @@ export class Usuario {
   tipoUsuarioNombre!: string;
   nombre!: string;
   apellido!: string;
-  rol!: number;
   entidadCodigo!: number;
   entidadNombre!: string;
+  triviaToken!:string;
   state!: number;
 }

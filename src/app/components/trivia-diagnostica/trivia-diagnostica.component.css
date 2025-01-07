@@ -63,3 +63,67 @@
 .border-round-usco {
   border-radius: 10px 10px 10px 10px;
 }
+
+
+/* Contenedor principal */
+.countdown-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #000; /* Fondo negro */
+  color: #fff; /* Texto blanco */
+  height: 100vh;
+  font-family: 'Arial', sans-serif;
+  padding: 10px;
+  text-align: center;
+}
+
+/* Título */
+h2 {
+  font-size: 1rem; /* Tamaño reducido */
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #000000;
+}
+
+/* Contenedor del contador */
+.countdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Caja de tiempo */
+.time-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 5px; /* Espaciado reducido */
+}
+
+.number {
+  font-size: 1.0rem; /* Tamaño más pequeño */
+  font-weight: bold;
+  color: #fff;
+  background: #064500; /* Fondo oscuro */
+  border-radius: 8px; /* Esquinas redondeadas */
+  padding: 8px 16px;
+  box-shadow: 0px 3px 6px rgba(255, 255, 255, 0.2); /* Sombra */
+}
+
+.label {
+  font-size: 0.8rem; /* Etiqueta más pequeña */
+  text-transform: uppercase;
+  margin-top: 3px;
+  color: #383838; /* Texto gris claro */
+}
+
+/* Separador */
+.separator {
+  font-size: 1.5rem;
+  margin: 0 3px; /* Espaciado reducido */
+  color: #000000;
+}

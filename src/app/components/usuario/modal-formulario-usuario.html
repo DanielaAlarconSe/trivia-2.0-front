@@ -13,7 +13,7 @@
             <div class="col">
               <div class="form-group">
                 <label>Usuario:</label>
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="example-full-width" appearance="outline">
                   <input matInput [value]="data.usuario.correo" readonly />
                 </mat-form-field>
               </div>
@@ -23,7 +23,7 @@
                 <label for="opciones"
                   >Tipo de Usuario: <span class="requerido"> * </span></label
                 >
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="example-full-width" appearance="outline">
                   <mat-select
                     class="font-sm-corhuila"
                     formControlName="tipo"
@@ -46,7 +46,7 @@
                 <label for="contrasena"
                   >Contraseña: <span class="requerido"> * </span></label
                 >
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="example-full-width" appearance="outline">
                   <input
                     autocomplete="off"
                     matInput
@@ -72,7 +72,7 @@
                 <label for="contrasena"
                   >Contraseña: <span class="requerido"> * </span></label
                 >
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="example-full-width" appearance="outline">
                   <input
                     autocomplete="off"
                     matInput
@@ -86,7 +86,7 @@
             <div class="col" *ngIf="form.get('tipo')!.value == 4">
               <div class="form-group">
                 <label for="opciones">Entidad: </label>
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="example-full-width" appearance="outline">
                   <mat-select
                     class="font-sm-corhuila"
                     formControlName="entidad"

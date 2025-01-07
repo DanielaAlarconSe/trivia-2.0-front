@@ -1,8 +1,8 @@
 <app-admin-navbar>
   <div class="pl-4 pr-4 pb-4 text-center">
     <div class="card shadow-sm mt-3">
-      <div class="card-header text-center" style="background-color: #d5dbdb">
-        <h4 class="mt-2">Reporte Calificaciones Trivia</h4>
+      <div class="card-header text-center" style="background-color: #98b5b57b">
+        <h4 class="mt-2">Reporte calificaciones trivia</h4>
       </div>
       <div class="card-body">
         <fieldset class="scheduler-border shadow-sm">
@@ -14,6 +14,9 @@
                 <mat-select [(ngModel)]="cursoCodigo" (selectionChange)="obtenerCuestionario(cursoCodigo)">
                   <mat-option *ngFor="let curso of listadoCursos" [value]="curso.codigo">
                     {{ curso.nombre }}
+                  </mat-option>
+                  <mat-option *ngIf="authService.user.tipoUsuarioCodigo == 1" value="0">
+                    TODOS
                   </mat-option>
                 </mat-select>
               </mat-form-field>

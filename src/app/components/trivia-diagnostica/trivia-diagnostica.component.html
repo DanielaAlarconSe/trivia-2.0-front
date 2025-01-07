@@ -1,6 +1,28 @@
 <app-navbar></app-navbar>
 <div class="container text-center">
-  <div class="container mt-5">
+  <h2 class="text-center pt-4">Finalización de la prueba</h2>
+<div class="countdown">
+  <div class="time-box">
+    <span class="number">{{ countdown.days }}</span>
+    <span class="label">Días</span>
+  </div>
+  <span class="separator">:</span>
+  <div class="time-box">
+    <span class="number">{{ countdown.hours }}</span>
+    <span class="label">Horas</span>
+  </div>
+  <span class="separator">:</span>
+  <div class="time-box">
+    <span class="number">{{ countdown.minutes }}</span>
+    <span class="label">Minutos</span>
+  </div>
+  <span class="separator">:</span>
+  <div class="time-box">
+    <span class="number">{{ countdown.seconds }}</span>
+    <span class="label">Segundos</span>
+  </div>
+</div>
+  <div class="container mt-3">
     <div
       class="row prev-header-encuesta-usco mt-2 mb-3 shadow"
       *ngIf="cuestionario"

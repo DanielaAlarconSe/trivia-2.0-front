@@ -7,7 +7,7 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { Curso } from '../models/curso';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CursoService {
   private url: string = `${environment.URL_BACKEND}/curso`;
@@ -40,9 +40,9 @@ export class CursoService {
     return false;
   }
 
-  obtenerCursos(): Observable<Curso[]> {
+  obtenerCursos(usuario: number, persona: number): Observable<Curso[]> {
     return this.http
-      .get<Curso[]>(`${this.url}/obtener-cursos`, {
+      .get<Curso[]>(`${this.url}/obtener-cursos/${usuario}/${persona}`, {
         headers: this.aggAutorizacionHeader(),
       })
       .pipe(

@@ -14,7 +14,7 @@
                   >Nombre de la trivia:
                   <span class="requerido"> * </span></label
                 >
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="example-full-width" appearance="outline">
                   <input
                     matInput
                     formControlName="nombre"
@@ -27,7 +27,7 @@
             <div class="col">
               <div class="form-group">
                 <label>Categoria: <span class="requerido"> * </span></label>
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="example-full-width" appearance="outline">
                   <mat-select class="font-sm-corhuila" formControlName="categoria">
                     <mat-option
                       *ngFor="let option of categorias"
@@ -41,7 +41,7 @@
             <div class="col" *ngIf="formulario.get('categoria')!.value !== 2">
               <div class="form-group">
                 <label>Curso: <span class="requerido"> * </span></label>
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="example-full-width" appearance="outline">
                   <mat-select class="font-sm-corhuila" formControlName="curso">
                     <mat-option
                       *ngFor="let option of cursos"
@@ -59,7 +59,7 @@
                 <label
                   >Fecha de inicio: <span class="requerido"> * </span></label
                 >
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="example-full-width" appearance="outline">
                   <input
                     matInput
                     formControlName="fechaInicio"
@@ -72,7 +72,7 @@
             <div class="col">
               <div class="form-group">
                 <label>Fecha Fin: <span class="requerido"> * </span></label>
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="example-full-width" appearance="outline">
                   <input
                     matInput
                     type="datetime-local"
@@ -87,7 +87,7 @@
             <div class="col">
               <div class="form-group">
                 <label>Instrucciones: <span class="requerido"> * </span></label>
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="example-full-width" appearance="outline">
                   <textarea
                     matInput
                     #mesage

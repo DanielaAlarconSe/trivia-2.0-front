@@ -99,12 +99,17 @@ export class CuestionarioComponent {
   }
 
   obtenerCuestionarios() {
-    this.cuestionarioService.obtenerCuestionarios().subscribe((data: any) => {
-      this.listadoCuestionario = data;
-      this.dataSource = new MatTableDataSource<Cuestionario>(data);
-      this.paginator.firstPage();
-      this.dataSource.paginator = this.paginator;
-    });
+    this.cuestionarioService
+      .obtenerCuestionarios(
+        this.authService.user.tipoUsuarioCodigo,
+        this.authService.user.personaCodigo
+      )
+      .subscribe((data: any) => {
+        this.listadoCuestionario = data;
+        this.dataSource = new MatTableDataSource<Cuestionario>(data);
+        this.paginator.firstPage();
+        this.dataSource.paginator = this.paginator;
+      });
   }
 
   registrarFormulario(): void {
@@ -285,15 +290,22 @@ export class ModalFormularioCuestionario {
   }
 
   obtenerCursos(): void {
-    this.cursoService.obtenerCursos().subscribe((data) => {
-      this.cursos = data;
-    });
+    this.cursoService
+      .obtenerCursos(
+        this.authService.user.tipoUsuarioCodigo,
+        this.authService.user.personaCodigo
+      )
+      .subscribe((data) => {
+        this.cursos = data;
+      });
   }
 
   obtenerCategorias(): void {
-    this.cuestionarioCategoriaService.obtenerCategorias().subscribe((data) => {
-      this.categorias = data;
-    });
+    this.cuestionarioCategoriaService
+      .obtenerCategorias(this.authService.user.tipoUsuarioCodigo)
+      .subscribe((data) => {
+        this.categorias = data;
+      });
   }
 
   generarCuestionario(): void {

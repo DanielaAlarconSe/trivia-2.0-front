@@ -193,15 +193,25 @@ export class EscalafonComponent {
   }
 
   obtenerCursos() {
-    this.cursoService.obtenerCursos().subscribe((data) => {
-      this.listadoCursos = data;
-    });
+    this.cursoService
+      .obtenerCursos(
+        this.authService.user.tipoUsuarioCodigo,
+        this.authService.user.personaCodigo
+      )
+      .subscribe((data) => {
+        this.listadoCursos = data;
+      });
   }
 
   obtenerCuestionarios() {
-    this.cuestionarioService.obtenerCuestionarios().subscribe((data) => {
-      this.listadoCuestionarios = data;
-    });
+    this.cuestionarioService
+      .obtenerCuestionarios(
+        this.authService.user.tipoUsuarioCodigo,
+        this.authService.user.personaCodigo
+      )
+      .subscribe((data) => {
+        this.listadoCuestionarios = data;
+      });
   }
 
   filtrar(event: Event) {
@@ -293,7 +303,6 @@ export class EscalafonComponent {
         }
       },
     });
-    
 
     setTimeout(() => {
       document
@@ -330,14 +339,24 @@ export class EscalafonComponent {
                 (response: any) => {
                   const imageUrl = response.secure_url;
                   switch (platform) {
-                    case 'twitter': this.shareOnTwitter(imageUrl); break;
-                    case 'linkedin': this.shareOnLinkedIn(imageUrl); break;
-                    case 'whatsapp': this.shareOnWhatsApp(imageUrl); break;
-                    default: this.shareOnFacebook(imageUrl);
+                    case 'twitter':
+                      this.shareOnTwitter(imageUrl);
+                      break;
+                    case 'linkedin':
+                      this.shareOnLinkedIn(imageUrl);
+                      break;
+                    case 'whatsapp':
+                      this.shareOnWhatsApp(imageUrl);
+                      break;
+                    default:
+                      this.shareOnFacebook(imageUrl);
                   }
                 },
                 (error) => {
-                  console.error('Error al subir la imagen a Cloudinary:', error);
+                  console.error(
+                    'Error al subir la imagen a Cloudinary:',
+                    error
+                  );
                 }
               );
             }
@@ -348,7 +367,6 @@ export class EscalafonComponent {
       }
     }, 500); // Ajusta el tiempo si es necesario.
   }
-  
 
   shareOnFacebook(imageUrl: string) {
     const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
@@ -360,7 +378,7 @@ export class EscalafonComponent {
   shareOnTwitter(imageUrl: string) {
     const text = encodeURIComponent(
       '¡He completado la trivia ' +
-      ' de Ciberseguridad en línea con éxito! 🔒🌐 Descubre mi resultado:'
+        ' de Ciberseguridad en línea con éxito! 🔒🌐 Descubre mi resultado:'
     );
     const twitterShareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(
       imageUrl
@@ -378,12 +396,11 @@ export class EscalafonComponent {
   shareOnWhatsApp(imageUrl: string) {
     const message = encodeURIComponent(
       '¡He completado la trivia ' +
-      ' de Ciberseguridad en línea con éxito! Descubre mi resultado:'
+        ' de Ciberseguridad en línea con éxito! Descubre mi resultado:'
     );
     const whatsappShareUrl = `https://wa.me/?text=${message}%20${encodeURIComponent(
       imageUrl
     )}`;
     window.open(whatsappShareUrl, '_blank');
   }
-
 }

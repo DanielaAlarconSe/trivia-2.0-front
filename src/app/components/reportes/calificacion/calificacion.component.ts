@@ -67,7 +67,7 @@ export class CalificacionComponent {
     public cursoService: CursoService,
     public dialog: MatDialog,
     public datePipe: DatePipe,
-    private authService: AuthService,
+    public authService: AuthService,
     public reporteCalificacionesExcelService: ReporteCalificacionesExcelService,
     private router: Router,
     private escalafonPdfService: EscalafonPdfService
@@ -129,7 +129,7 @@ export class CalificacionComponent {
 
         if (this.cuestionarioSeleccionado) {
           console.log(this.cuestionarioSeleccionado, 'cuestionario selec ---');
-          
+
           this.mostrarBotonCompartir =
             this.cuestionarioSeleccionado.categoriaCodigo === 3;
         }
@@ -169,9 +169,14 @@ export class CalificacionComponent {
   }
 
   obtenerCursos() {
-    this.cursoService.obtenerCursos().subscribe((data) => {
-      this.listadoCursos = data;
-    });
+    this.cursoService
+      .obtenerCursos(
+        this.authService.user.tipoUsuarioCodigo,
+        this.authService.user.personaCodigo
+      )
+      .subscribe((data) => {
+        this.listadoCursos = data;
+      });
   }
 
   filtrar(event: Event) {

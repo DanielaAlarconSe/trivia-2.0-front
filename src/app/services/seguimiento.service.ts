@@ -5,12 +5,12 @@ import { environment } from 'src/environments/environment';
 import { AuthService } from './auth.service';
 import { EmailNotificacionDto } from '../models/dto/email-notificacion-dto';
 import { Observable } from 'rxjs';
+import { AsignacionTrivia } from '../models/asignacion-trivia';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SeguimientoService {
-
   private url: string = `${environment.URL_BACKEND}/seguimiento`;
   private httpHeaders = new HttpHeaders({ 'Content-type': 'application/json' });
 
@@ -41,11 +41,31 @@ export class SeguimientoService {
     return false;
   }
 
-  public emailNotificacionAspirante(email: EmailNotificacionDto): Observable<EmailNotificacionDto> {
-    return this.http.put<EmailNotificacionDto>(`${this.url}/email/aspirante`, email);
+  public emailNotificacionAspirante(
+    email: EmailNotificacionDto
+  ): Observable<EmailNotificacionDto> {
+    return this.http.put<EmailNotificacionDto>(
+      `${this.url}/email/aspirante`,
+      email
+    );
   }
 
-  public emailNotificacionEntidad(email: EmailNotificacionDto): Observable<EmailNotificacionDto> {
-    return this.http.put<EmailNotificacionDto>(`${this.url}/email/entidad`, email);
+  public emailNotificacionEntidad(
+    email: EmailNotificacionDto
+  ): Observable<EmailNotificacionDto> {
+    return this.http.put<EmailNotificacionDto>(
+      `${this.url}/email/entidad`,
+      email
+    );
+  }
+
+  actualizarSeguimiento(asignacion: AsignacionTrivia): Observable<number> {
+    return this.http.put<number>(
+      `${this.url}/actualizar-seguimiento`,
+      asignacion,
+      {
+        headers: this.aggAutorizacionHeader(),
+      }
+    );
   }
 }

@@ -63,6 +63,8 @@ export class PersonaService {
   }
 
   actualizarPersona(persona: Persona): Observable<number> {
+    console.log(persona);
+
     return this.http.put<number>(`${this.url}/actualizar-persona`, persona, {
       headers: this.aggAutorizacionHeader(),
     });

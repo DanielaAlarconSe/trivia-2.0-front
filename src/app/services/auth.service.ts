@@ -127,7 +127,7 @@ export class AuthService {
     this.usuario.tipoUsuarioCodigo = datos.tipoUsuarioCodigo;
     this.usuario.tipoUsuarioNombre = datos.tipoUsuarioNombre;
     this.usuario.apellido = datos.apellido;
-    this.usuario.rol = datos.role;
+    this.usuario.triviaToken = datos.triviaToken;
 
     sessionStorage.setItem('usuario', JSON.stringify(this.usuario));
     localStorage.setItem('usuario', JSON.stringify(this.usuario));

@@ -7,10 +7,9 @@ import { catchError, Observable, throwError } from 'rxjs';
 import { CuestionarioCategoria } from '../models/cuestionario-categoria';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CuestionarioCategoriaService {
-
   private url: string = `${environment.URL_BACKEND}/categoria`;
   private httpHeaders = new HttpHeaders({ 'Content-type': 'application/json' });
 
@@ -41,11 +40,14 @@ export class CuestionarioCategoriaService {
     return false;
   }
 
-  obtenerCategorias(): Observable<CuestionarioCategoria[]> {
+  obtenerCategorias(usuarioTipo: number): Observable<CuestionarioCategoria[]> {
     return this.http
-      .get<CuestionarioCategoria[]>(`${this.url}/obtener-categoria`, {
-        headers: this.aggAutorizacionHeader(),
-      })
+      .get<CuestionarioCategoria[]>(
+        `${this.url}/obtener-categoria/${usuarioTipo}`,
+        {
+          headers: this.aggAutorizacionHeader(),
+        }
+      )
       .pipe(
         catchError((e) => {
           if (this.isNoAutorizado(e)) {

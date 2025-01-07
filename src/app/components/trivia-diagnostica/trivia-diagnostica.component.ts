@@ -24,6 +24,8 @@ import { AsginacionService } from '../../services/asginacion.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { SeguimientoService } from '../../services/seguimiento.service';
 import { EmailNotificacionDto } from 'src/app/models/dto/email-notificacion-dto';
+import { interval, Subscription } from 'rxjs';
+import { AsignacionTrivia } from 'src/app/models/asignacion-trivia';
 
 @Component({
   selector: 'app-trivia-diagnostica',
@@ -43,6 +45,13 @@ export class TriviaDiagnosticaComponent {
   estudianteCodigo!: number;
   calificacion!: number;
   aspirante: any = {};
+  countdown = {
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  };
+  private subscription: Subscription | null = null;
 
   cloudinaryUploadUrl =
     'https://api.cloudinary.com/v1_1/df4xfvk4i/image/upload'; // Cambia YOUR_CLOUD_NAME
@@ -76,14 +85,80 @@ export class TriviaDiagnosticaComponent {
     this.asginacionService
       .obtenerAspirante(this.authservice.user.codigo)
       .subscribe((data) => {
-        console.log(data);
         this.aspirante = Array.isArray(data) ? data[0] : data;
+
+        if (this.aspirante.seguimientoCodigo == 3) {
+          this.authservice.logout();
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer);
+              toast.addEventListener('mouseleave', Swal.resumeTimer);
+            },
+          });
+
+          Toast.fire({
+            icon: 'success',
+            title: 'La prueba ya fue realizada',
+          });
+          this.router.navigate(['/inicio']);
+        }
+        const endDateTime = new Date(
+          this.aspirante.fechaFinalizacion
+        ).getTime();
+
+        this.subscription = interval(1000).subscribe(() => {
+          const now = new Date().getTime();
+          const timeLeft = endDateTime - now;
+
+          if (timeLeft > 0) {
+            this.countdown.days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            this.countdown.hours = Math.floor(
+              (timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+            );
+            this.countdown.minutes = Math.floor(
+              (timeLeft % (1000 * 60 * 60)) / (1000 * 60)
+            );
+            this.countdown.seconds = Math.floor(
+              (timeLeft % (1000 * 60)) / 1000
+            );
+          } else {
+            this.countdown = { days: 0, hours: 0, minutes: 0, seconds: 0 };
+            this.authservice.logout();
+            const Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+              },
+            });
+
+            Toast.fire({
+              icon: 'warning',
+              title: 'La prueba expiró',
+            });
+            this.router.navigate(['/inicio']);
+            this.subscription?.unsubscribe(); // Detenemos el contador al finalizar
+          }
+        });
         this.formularioEstudiante
           .get('nombre')!
           .setValue(
             this.aspirante.personaNombre + ' ' + this.aspirante.personaApellido
           );
       });
+  }
+
+  ngOnDestroy() {
+    this.subscription?.unsubscribe(); // Limpiamos la suscripción al destruir el componente
   }
 
   takeScreenshotAndUpload(platform?: string) {
@@ -170,12 +245,27 @@ export class TriviaDiagnosticaComponent {
 
   obtenerCuestionario(): void {
     this.cuestionarioService
-      .obtenerCuestionarioToken(this.cuestionarioToken)
+      .obtenerCuestionarioTokenAspirante(this.cuestionarioToken)
       .subscribe(
         (data) => {
-          if (JSON.stringify(data) != '[]') {
+
+          if (data != null) {
+            console.log('Entra',(data != null));
+
             this.cuestionario = data;
             this.listarPreguntasCuestionario();
+          }else{
+            Swal.fire({
+              icon: 'warning',
+              title: 'Advertencia',
+              timer: 8000, // Tiempo en milisegundos (5 segundos)
+              timerProgressBar: true,
+              showConfirmButton: false,
+              text: 'No se puede obtener la trivia. Por favor, revise los tiempos asignados.',
+            }).then(() => {
+              // Redirigir a la URL cuando el temporizador termina
+              this.router.navigate(['/inicio']);
+            });
           }
         },
         (error) => {
@@ -398,12 +488,16 @@ export class TriviaDiagnosticaComponent {
               email.cuestionarioNombre = this.aspirante.cuestionarioNombre;
               1;
               email.puntaje = calificacionTotal + '';
-              console.log(email);
 
               this.seguimientoService
                 .emailNotificacionEntidad(email)
                 .subscribe((data) => {
-                  console.log(data);
+                  let seguimiento: AsignacionTrivia = new AsignacionTrivia();
+                  seguimiento.codigo = this.aspirante.asignacionCodigo;
+                  seguimiento.seguimiento = 3;
+                  this.seguimientoService
+                    .actualizarSeguimiento(seguimiento)
+                    .subscribe((data) => {});
                 });
             } else {
               this.mensajeError();

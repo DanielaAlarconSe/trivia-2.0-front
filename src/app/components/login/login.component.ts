@@ -81,10 +81,16 @@ export class LoginComponent {
           title: 'Sesión iniciada correctamente',
         });
         console.log(this.authService.user);
-        if(this.authService.user.tipoUsuarioCodigo === 1 || this.authService.user.tipoUsuarioCodigo === 2){
+        if (
+          this.authService.user.tipoUsuarioCodigo === 1 ||
+          this.authService.user.tipoUsuarioCodigo === 2
+        ) {
           this.router.navigate(['/panel']);
-        }else{
-          this.router.navigate(['/trivia-diagnostica','a7f941c803da46cda775b7e71170a942']);
+        } else {
+          this.router.navigate([
+            '/trivia-diagnostica',
+            this.authService.user.triviaToken,
+          ]);
         }
       },
       (err) => this.fError(err)

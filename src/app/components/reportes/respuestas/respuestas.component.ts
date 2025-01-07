@@ -55,7 +55,7 @@ export class RespuestasComponent {
     public cursoService: CursoService,
     public preguntaService: PreguntaService,
     public dialog: MatDialog,
-    private authService: AuthService
+    public authService: AuthService
   ) {
     if (this.authService.validacionToken()) {
       this.obtenerCursos();
@@ -75,9 +75,14 @@ export class RespuestasComponent {
   }
 
   obtenerCursos() {
-    this.cursoService.obtenerCursos().subscribe((data) => {
-      this.listadoCursos = data;
-    });
+    this.cursoService
+      .obtenerCursos(
+        this.authService.user.tipoUsuarioCodigo,
+        this.authService.user.personaCodigo
+      )
+      .subscribe((data) => {
+        this.listadoCursos = data;
+      });
   }
 
   obtenerCuestionarios(codigo: number) {

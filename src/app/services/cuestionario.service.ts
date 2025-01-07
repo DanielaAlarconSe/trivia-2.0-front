@@ -40,11 +40,17 @@ export class CuestionarioService {
     return false;
   }
 
-  obtenerCuestionarios(): Observable<Cuestionario[]> {
+  obtenerCuestionarios(
+    usuario: number,
+    persona: number
+  ): Observable<Cuestionario[]> {
     return this.http
-      .get<Cuestionario[]>(`${this.url}/obtener-cuestionarios`, {
-        headers: this.aggAutorizacionHeader(),
-      })
+      .get<Cuestionario[]>(
+        `${this.url}/obtener-cuestionarios/${usuario}/${persona}`,
+        {
+          headers: this.aggAutorizacionHeader(),
+        }
+      )
       .pipe(
         catchError((e) => {
           if (this.isNoAutorizado(e)) {
@@ -90,6 +96,24 @@ export class CuestionarioService {
       .get<Cuestionario>(`${this.url}/obtener-cuestionario-token/${token}`, {
         headers: this.aggAutorizacionHeader(),
       })
+      .pipe(
+        catchError((e) => {
+          if (this.isNoAutorizado(e)) {
+            return throwError(e);
+          }
+          return throwError(e);
+        })
+      );
+  }
+
+  obtenerCuestionarioTokenAspirante(token: string): Observable<Cuestionario> {
+    return this.http
+      .get<Cuestionario>(
+        `${this.url}/obtener-cuestionario-token-aspirante/${token}`,
+        {
+          headers: this.aggAutorizacionHeader(),
+        }
+      )
       .pipe(
         catchError((e) => {
           if (this.isNoAutorizado(e)) {

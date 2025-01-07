@@ -93,7 +93,9 @@
           *ngFor="let cuestionario of cuestionarios; let i = index"
         >
           <div
-            *ngIf="cuestionario.estado != 0 && cuestionario.categoriaCodigo == 1"
+            *ngIf="
+              cuestionario.estado != 0 && cuestionario.categoriaCodigo == 1
+            "
             class="card mx-30 cursor-select card-usco-menu"
             (click)="realizarEncuesta(cuestionario.codigo)"
             [routerLink]="['/trivia', cuestionario.codigo]"
@@ -109,6 +111,12 @@
                 {{ cuestionario.fechaInicio | date : "dd-MM-yyyy" }}
                 hasta
                 {{ cuestionario.fechaFin | date : "dd-MM-yyyy" }}
+              </h6>
+              <h6 class="alert alert-warning mt-2" style="font-size: 14px">
+                <i class="fa-regular fa-clock"></i>
+                {{ cuestionario.fechaInicio | date : "shortTime" }}
+                -
+                {{ cuestionario.fechaFin | date : "shortTime" }}
               </h6>
               <hr class="dashed" />
               <p
