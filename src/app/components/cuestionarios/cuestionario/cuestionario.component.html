@@ -122,7 +122,7 @@
                     <i class="fa-solid fa-pencil fa-xs"></i>
                   </button>
                   <button
-                    *ngIf="(element.token | json) != 'null'"
+                    *ngIf="(element.token | json) != 'null' && element.categoriaCodigo == 3"
                     class="btn btn-corhuila-delete btn-sm mr-2"
                     #tooltip="matTooltip"
                     matTooltip="Copiar URL"
