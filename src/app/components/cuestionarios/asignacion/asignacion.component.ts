@@ -88,7 +88,7 @@ export class AsignacionComponent {
     email.aspiranteNombre =
       element.personaNombre + ' ' + element.personaApellido;
     email.usuario = element.personaEmail;
-    email.clave = element.personaToken;
+    email.clave = element.personaEmail;
     email.entidadNombre = element.entidadNombre;
     const formatFecha = (fecha: string | Date): string => {
       // Asegurar que sea una instancia de Date
@@ -231,7 +231,7 @@ export class AsignacionComponent {
 
   eliminarEntidad(element: Entidad) {
     Swal.fire({
-      title: 'Está a punto de eliminar la entidad',
+      title: 'Está a punto de eliminar la asignación',
       text: 'La siguiente acción no podrá deshacerse.',
       icon: 'warning',
       showCancelButton: true,

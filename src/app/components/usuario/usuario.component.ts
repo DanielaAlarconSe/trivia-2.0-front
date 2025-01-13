@@ -241,8 +241,8 @@ export class ModalFormularioUsuario {
     usuario.usuario = this.data.usuario.correo;
     usuario.tipo = this.form.get('tipo')!.value;
     if( this.form.get('tipo')!.value === 4){
-      usuario.contrasena = this.claveGenerada+'';
-      usuario.token = this.claveGenerada+'';
+      usuario.contrasena = this.data.usuario.correo;
+      //usuario.token = this.claveGenerada+'';
     }else{
       usuario.contrasena = this.form.get('contrasena')!.value;
     }
