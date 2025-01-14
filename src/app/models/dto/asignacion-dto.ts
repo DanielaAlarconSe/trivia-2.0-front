@@ -11,6 +11,8 @@ export class AsignacionDto {
   asignacionCodigo!: number;
   cuestionarioCodigo!: number;
   cuestionarioNombre!: string;
+  cuestionarioFechaInicio!: Date;
+  cuestionarioFechaFin!: Date;
   fechaAsignacion!: Date;
   fechaFinalizacion!: Date;
   seguimientoCodigo!: number;

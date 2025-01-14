@@ -68,9 +68,17 @@
               <ng-container matColumnDef="seguimiento">
                 <th mat-header-cell *matHeaderCellDef>Seguimiento</th>
                 <td mat-cell *matCellDef="let element">
-                  <span class="alert alert-warning pt-2" *ngIf="element.seguimientoCodigo == 1">{{ element.seguimientoNombre }}</span>
-                  <span class="alert alert-info pt-2" *ngIf="element.seguimientoCodigo == 2">{{ element.seguimientoNombre }}</span>
-                  <span class="alert alert-success pt-2" *ngIf="element.seguimientoCodigo == 3">{{ element.seguimientoNombre }}</span>
+                  <span
+                    [ngClass]="{
+                      'alert-warning': element.seguimientoCodigo == 1,
+                      'alert-info': element.seguimientoCodigo == 2,
+                      'alert-success': element.seguimientoCodigo == 3,
+                      'alert-danger': element.seguimientoCodigo == 4
+                    }"
+                    class="alert pt-2"
+                  >
+                    {{ element.seguimientoNombre }}
+                  </span>
                 </td>
               </ng-container>
               <ng-container matColumnDef="fechaInicio">
@@ -93,7 +101,7 @@
                     #tooltip="matTooltip"
                     matTooltip="Borrar"
                     matTooltipPosition="above"
-                    (click)="eliminarEntidad(element)"
+                    (click)="eliminarAsignacion(element)"
                   >
                     <i class="fa-solid fa-trash fa-xs"></i>
                   </button>

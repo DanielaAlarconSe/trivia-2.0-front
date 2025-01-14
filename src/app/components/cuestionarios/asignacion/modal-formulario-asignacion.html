@@ -74,9 +74,6 @@
             </div>
           </div>
           <div class="row p-4">
-            <div class="col text-center" *ngIf="formulario.errors?.['rangoFechasInvalido']">
-              <small class="alert alert-danger">Las fechas deben estar dentro del rango permitido por el cuestionario seleccionado.</small>
-            </div>
             <div class="col text-center" *ngIf="formulario.errors?.['fechasDesordenadas']">
               <small class="alert alert-danger">La fecha de asignación no puede ser mayor que la fecha de finalización.</small>
             </div>

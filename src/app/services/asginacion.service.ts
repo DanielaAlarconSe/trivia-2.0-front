@@ -97,7 +97,7 @@ export class AsginacionService {
 
   eliminarAsignacionTrivia(asignacion: AsignacionTrivia): Observable<number> {
     return this.http.put<number>(
-      `${this.url}/actualizar-asignacion`,
+      `${this.url}/eliminar-asignacion`,
       asignacion,
       {
         headers: this.aggAutorizacionHeader(),

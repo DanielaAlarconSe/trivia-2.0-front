@@ -1,5 +1,6 @@
 export class Usuario {
   codigo!: number;
+  horaSesion!:Date;
   personaCodigo!: number;
   username!: string;
   password!: string;

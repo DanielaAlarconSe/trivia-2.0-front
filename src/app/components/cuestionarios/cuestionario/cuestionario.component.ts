@@ -1,4 +1,3 @@
-import { CursoService } from './../../../services/curso.service';
 import { Component, Inject, ViewChild } from '@angular/core';
 import {
   FormBuilder,
@@ -22,6 +21,7 @@ import { CuestionarioService } from 'src/app/services/cuestionario.service';
 import { Curso } from 'src/app/models/curso';
 import { CuestionarioCategoriaService } from 'src/app/services/cuestionario-categoria.service';
 import { CuestionarioCategoria } from 'src/app/models/cuestionario-categoria';
+import { CursoService } from 'src/app/services/curso.service';
 
 @Component({
   selector: 'app-cuestionario',
@@ -282,8 +282,9 @@ export class ModalFormularioCuestionario {
       nombre: new FormControl('', Validators.required),
       instrucciones: new FormControl('', Validators.required),
       curso: new FormControl(''),
-      fechaInicio: new FormControl('', Validators.required),
-      fechaFin: new FormControl('', Validators.required),
+      fechaInicio: new FormControl(''),
+      fechaFin: new FormControl(''),
+      tiempo: new FormControl('', [Validators.min(1), Validators.max(1440)]),
       categoria: new FormControl('', Validators.required),
       estado: new FormControl(''),
     });
@@ -314,12 +315,28 @@ export class ModalFormularioCuestionario {
     cuestionario.nombre = this.formulario.get('nombre')!.value;
     cuestionario.instrucciones = this.formulario.get('instrucciones')!.value;
     cuestionario.cursoCodigo = this.formulario.get('curso')!.value;
-    cuestionario.fechaInicio = this.formulario.get('fechaInicio')!.value;
-    cuestionario.fechaFin = this.formulario.get('fechaFin')!.value;
+    if (this.formulario.get('categoria')!.value == 2) {
+      const tiempo = this.formulario.get('tiempo')!.value; // Duración en minutos
+      const fechaInicio = this.formulario.get('fechaInicio')!.value; // Hora de inicio seleccionada
+
+      // Convertir fechaInicio a un objeto Date
+      const fechaInicioDate = new Date(fechaInicio);
+
+      // Calcular la fecha de finalización sumando los minutos
+      const fechaFinDate = new Date(fechaInicioDate.getTime() + tiempo * 60000); // 60000 ms = 1 minuto
+
+      // Actualizar las propiedades del cuestionario
+      cuestionario.fechaInicio = fechaInicioDate;
+      cuestionario.fechaFin = fechaFinDate;
+
+      console.log('Fecha de inicio:', cuestionario.fechaInicio);
+      console.log('Fecha de finalización:', cuestionario.fechaFin);
+    } else {
+      cuestionario.fechaInicio = this.formulario.get('fechaInicio')!.value;
+      cuestionario.fechaFin = this.formulario.get('fechaFin')!.value;
+    }
     cuestionario.categoriaCodigo = this.formulario.get('categoria')!.value;
     cuestionario.estado = this.formulario.get('estado')!.value;
-
-    console.log(cuestionario, ':::');
 
     if (this.editar) {
       this.actualizarCuestionario(cuestionario);
@@ -378,6 +395,19 @@ export class ModalFormularioCuestionario {
     this.formulario.get('nombre')!.setValue(element.nombre);
     this.formulario.get('instrucciones')!.setValue(element.instrucciones);
     this.formulario.get('curso')!.setValue(element.cursoCodigo);
+    if (element.categoriaCodigo == 2) {
+      const fechaInicio = new Date(element.fechaInicio); // Convertir a Date
+      const fechaFin = new Date(element.fechaFin); // Convertir a Date
+
+      // Calcular la diferencia en milisegundos
+      const diferenciaMs = fechaFin.getTime() - fechaInicio.getTime();
+
+      // Convertir a minutos
+      const diferenciaMinutos = Math.floor(diferenciaMs / 60000);
+
+      // Asignar el valor de tiempo
+      this.formulario.get('tiempo')!.setValue(diferenciaMinutos);
+    }
     // Formatear las fechas para que sean compatibles con el input datetime-local
     const formatDate = (date: Date) => {
       const pad = (num: number) => (num < 10 ? '0' : '') + num;

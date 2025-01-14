@@ -122,6 +122,7 @@ export class AuthService {
     // let datos = helper.decodeToken(accessToken);
     this.usuario = new Usuario();
     this.usuario.codigo = datos.usuarioCodigo;
+    this.usuario.horaSesion = datos.horaSesion;
     this.usuario.personaCodigo = datos.personaCodigo;
     this.usuario.nombre = datos.nombre;
     this.usuario.tipoUsuarioCodigo = datos.tipoUsuarioCodigo;

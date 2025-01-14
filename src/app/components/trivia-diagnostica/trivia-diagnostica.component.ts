@@ -86,8 +86,10 @@ export class TriviaDiagnosticaComponent {
       .obtenerAspirante(this.authservice.user.codigo)
       .subscribe((data) => {
         this.aspirante = Array.isArray(data) ? data[0] : data;
-
-        if (this.aspirante.seguimientoCodigo == 3) {
+        if (
+          this.aspirante.seguimientoCodigo == 3 ||
+          this.aspirante.seguimientoCodigo == 4
+        ) {
           this.authservice.logout();
           const Toast = Swal.mixin({
             toast: true,
@@ -106,10 +108,33 @@ export class TriviaDiagnosticaComponent {
             title: 'La prueba ya fue realizada',
           });
           this.router.navigate(['/inicio']);
+        } else {
+          let seguimiento: AsignacionTrivia = new AsignacionTrivia();
+          seguimiento.codigo = this.aspirante.asignacionCodigo;
+          seguimiento.seguimiento = 4;
+          this.seguimientoService
+            .actualizarSeguimiento(seguimiento)
+            .subscribe((data) => {});
         }
-        const endDateTime = new Date(
-          this.aspirante.fechaFinalizacion
-        ).getTime();
+
+        const fechaInicio = new Date(this.aspirante.cuestionarioFechaInicio); // Convertir a Date
+        const fechaFin = new Date(this.aspirante.cuestionarioFechaFin); // Convertir a Date
+
+        // Calcular la diferencia en milisegundos
+        const diferenciaMs = fechaFin.getTime() - fechaInicio.getTime();
+
+        // Convertir a minutos
+        const diferenciaMinutos = Math.floor(diferenciaMs / 60000);
+
+        // Obtener la fecha y hora actual
+        const fechaActual = new Date();
+
+        // Agregar la diferencia de minutos
+        const nuevaFecha = new Date(
+          fechaActual.getTime() + diferenciaMinutos * 60000
+        );
+
+        const endDateTime = new Date(nuevaFecha).getTime();
 
         this.subscription = interval(1000).subscribe(() => {
           const now = new Date().getTime();
@@ -248,13 +273,12 @@ export class TriviaDiagnosticaComponent {
       .obtenerCuestionarioTokenAspirante(this.cuestionarioToken)
       .subscribe(
         (data) => {
-
           if (data != null) {
-            console.log('Entra',(data != null));
+            console.log('Entra', data != null);
 
             this.cuestionario = data;
             this.listarPreguntasCuestionario();
-          }else{
+          } else {
             Swal.fire({
               icon: 'warning',
               title: 'Advertencia',

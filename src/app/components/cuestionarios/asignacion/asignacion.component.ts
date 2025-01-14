@@ -216,11 +216,13 @@ export class AsignacionComponent {
     this.actualizarAsignacion(this.asignacion);
   }
 
-  eliminar(entidad: Entidad) {
-    this.entidadService.eliminarEntidad(entidad).subscribe(
+  eliminar(element: AsignacionDto) {
+    let asignacion: AsignacionTrivia = new AsignacionTrivia();
+    asignacion.codigo = element.asignacionCodigo;
+    this.asginacionService.eliminarAsignacionTrivia(asignacion).subscribe(
       (data: any) => {
         if (data > 0) {
-          this.obtenerEntidades();
+          this.actualizarAsignacion(element);
         } else {
           this.mensajeError();
         }
@@ -229,7 +231,7 @@ export class AsignacionComponent {
     );
   }
 
-  eliminarEntidad(element: Entidad) {
+  eliminarAsignacion(element: AsignacionDto) {
     Swal.fire({
       title: 'Está a punto de eliminar la asignación',
       text: 'La siguiente acción no podrá deshacerse.',
@@ -384,13 +386,7 @@ export class ModalFormularioAsignacion {
 
       const fechaInicio = new Date(fechaInicioControl.value);
       const fechaFin = new Date(fechaFinControl.value);
-      const cuestionarioInicio = new Date(cuestionario.fechaInicio);
-      const cuestionarioFin = new Date(cuestionario.fechaFin);
 
-      // Validar que las fechas estén dentro del rango del cuestionario
-      if (fechaInicio < cuestionarioInicio || fechaFin > cuestionarioFin) {
-        return { rangoFechasInvalido: true };
-      }
 
       // Validar que la fecha de inicio no sea mayor que la fecha de fin
       if (fechaInicio > fechaFin) {
