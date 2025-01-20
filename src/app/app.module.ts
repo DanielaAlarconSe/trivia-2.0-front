@@ -52,6 +52,13 @@ import { CalificacionComponent } from './components/reportes/calificacion/califi
 import { RespuestasComponent } from './components/reportes/respuestas/respuestas.component';
 import { FiltroCursoPipe } from './pipes/filtro-curso.pipe';
 import { FiltroCuestionarioPipe } from './pipes/filtro-cuestionario.pipe';
+import { TriviaPublicaComponent } from './components/trivia-publica/trivia-publica.component';
+import { TriviaCompetitivaComponent } from './components/trivia-competitiva/trivia-competitiva.component';
+import { EscalafonComponent } from './components/reportes/escalafon/escalafon.component';
+import { EntidadComponent, ModalFormularioEntidad } from './components/entidad/entidad.component';
+import { AsignacionComponent, ModalFormularioAsignacion } from './components/cuestionarios/asignacion/asignacion.component';
+import { TriviaDiagnosticaComponent } from './components/trivia-diagnostica/trivia-diagnostica.component';
+import { LoginDiagnosticoComponent } from './components/login-diagnostico/login-diagnostico.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +76,8 @@ import { FiltroCuestionarioPipe } from './pipes/filtro-cuestionario.pipe';
     ModalFormularioPregunta,
     ModalFormularioRespuesta,
     ModalFormularioPreguntaRespuesta,
+    ModalFormularioEntidad,
+    ModalFormularioAsignacion,
     CursoComponent,
     UsuarioComponent,
     CuestionarioComponent,
@@ -84,6 +93,13 @@ import { FiltroCuestionarioPipe } from './pipes/filtro-cuestionario.pipe';
     RespuestasComponent,
     FiltroCursoPipe,
     FiltroCuestionarioPipe,
+    TriviaPublicaComponent,
+    TriviaCompetitivaComponent,
+    EscalafonComponent,
+    EntidadComponent,
+    AsignacionComponent,
+    TriviaDiagnosticaComponent,
+    LoginDiagnosticoComponent,
   ],
   imports: [
     BrowserModule,
@@ -104,6 +120,8 @@ import { FiltroCuestionarioPipe } from './pipes/filtro-cuestionario.pipe';
     ModalFormularioPregunta,
     ModalFormularioRespuesta,
     ModalFormularioPreguntaRespuesta,
+    ModalFormularioEntidad,
+    ModalFormularioAsignacion
   ],
   providers: [DatePipe, { provide: MAT_DATE_LOCALE, useValue: 'es-ES' }],
   bootstrap: [AppComponent],

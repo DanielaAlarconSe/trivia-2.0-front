@@ -6,5 +6,8 @@ export class Cuestionario {
   cursoNombre!: string;
   fechaInicio!: Date;
   fechaFin!: Date;
+  categoriaCodigo!: number;
+  categoriaNombre!: string;
+  token!: string;
   estado!: number;
 }

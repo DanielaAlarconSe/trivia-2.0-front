@@ -12,7 +12,7 @@ import { CuestionarioService } from 'src/app/services/cuestionario.service';
 import { Curso } from 'src/app/models/curso';
 import { Calificacion } from 'src/app/models/calificacion';
 import { Pregunta } from 'src/app/models/pregunta';
-import { ReporteAgrupadoDto } from 'src/app/dto/reporte-agrupado-dto';
+import { ReporteAgrupadoDto } from 'src/app/models/dto/reporte-agrupado-dto';
 
 @Component({
   selector: 'app-respuestas',
@@ -55,7 +55,7 @@ export class RespuestasComponent {
     public cursoService: CursoService,
     public preguntaService: PreguntaService,
     public dialog: MatDialog,
-    private authService: AuthService
+    public authService: AuthService
   ) {
     if (this.authService.validacionToken()) {
       this.obtenerCursos();
@@ -75,14 +75,19 @@ export class RespuestasComponent {
   }
 
   obtenerCursos() {
-    this.cursoService.obtenerCursos().subscribe((data) => {
-      this.listadoCursos = data;
-    });
+    this.cursoService
+      .obtenerCursos(
+        this.authService.user.tipoUsuarioCodigo,
+        this.authService.user.personaCodigo
+      )
+      .subscribe((data) => {
+        this.listadoCursos = data;
+      });
   }
 
   obtenerCuestionarios(codigo: number) {
     this.cuestionarioService
-      .obtenerCuestionariosCurso(codigo)
+      .obtenerCuestionariosCursoGeneral(codigo)
       .subscribe((data) => {
         this.listadoCuestionarios = data;
       });

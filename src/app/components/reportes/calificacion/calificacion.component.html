@@ -1,50 +1,46 @@
 <app-admin-navbar>
   <div class="pl-4 pr-4 pb-4 text-center">
     <div class="card shadow-sm mt-3">
-      <div class="card-header text-center" style="background-color: #d5dbdb">
-        <h4 class="mt-2">Reporte Calificaciones Trivia</h4>
+      <div class="card-header text-center" style="background-color: #98b5b57b">
+        <h4 class="mt-2">Reporte calificaciones trivia</h4>
       </div>
       <div class="card-body">
         <fieldset class="scheduler-border shadow-sm">
-          <legend class="scheduler-border font-usco-vt">Filtros</legend>
+          <legend class="scheduler-border font-usco-vt">Consulta</legend>
           <div class="row">
             <div class="col">
               <mat-form-field class="example-full-width" appearance="outline">
                 <mat-label>Cursos</mat-label>
-                <mat-select [(ngModel)]="cursoNombre">
-                  <mat-option
-                    *ngFor="let curso of listadoCursos"
-                    [value]="curso.nombre"
-                  >
+                <mat-select [(ngModel)]="cursoCodigo" (selectionChange)="obtenerCuestionario(cursoCodigo)">
+                  <mat-option *ngFor="let curso of listadoCursos" [value]="curso.codigo">
                     {{ curso.nombre }}
+                  </mat-option>
+                  <mat-option *ngIf="authService.user.tipoUsuarioCodigo == 1" value="0">
+                    TODOS
                   </mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
             <div class="col">
               <mat-form-field class="example-full-width" appearance="outline">
-                <mat-label>Cuestionarios</mat-label>
-                <mat-select [(ngModel)]="cuestionarioNombre">
-                  <mat-option
-                    *ngFor="let cuestionario of listadoCuestionarios"
-                    [value]="cuestionario.nombre"
-                  >
+                <mat-label>Trivias</mat-label>
+                <mat-select>
+                  <mat-option *ngFor="let cuestionario of listadoCuestionarios" [value]="cuestionario.codigo"
+                    (click)="obtenerCalificaciones(cuestionario.codigo)">
                     {{ cuestionario.nombre }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
           </div>
+        </fieldset>
+        <fieldset class="scheduler-border shadow-sm" *ngIf="listadoCalificaciones.length > 0">
+          <legend class="scheduler-border font-usco-vt">Filtros</legend>
           <div class="row mt-3">
             <div class="col text-left">
               <mat-form-field appearance="outline" class="example-full-width">
                 <mat-label>Campo de búsqueda</mat-label>
-                <input
-                  matInput
-                  (keyup)="filtrar($event)"
-                  type="text"
-                  required
-                />
+                <input matInput (keyup)="filtrar($event)" type="text" required />
                 <button matSuffix mat-icon-button>
                   <mat-icon>search</mat-icon>
                 </button>
@@ -61,17 +57,13 @@
           <legend class="scheduler-border font-usco-vt">Resultados</legend>
           <div class="row">
             <div class="col">
-              <table
-                mat-table
-                [dataSource]="
+              <table mat-table [dataSource]="
                   dataSource
                     | filtroCurso : 'cursoNombre' : cursoNombre
                     | filtroCurso : 'cuestionarioNombre' : cuestionarioNombre
-                "
-                class="table table-hover shadow-sm"
-              >
+                " class="table table-hover shadow-sm">
                 <ng-container matColumnDef="index">
-                  <th mat-header-cell *matHeaderCellDef>N°</th>
+                  <th mat-header-cell *matHeaderCellDef>Puesto</th>
                   <td mat-cell *matCellDef="let element; let i = index">
                     {{ dataSource.filteredData.indexOf(element) + 1 }}
                   </td>
@@ -107,10 +99,7 @@
                   </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr
-                  mat-row
-                  *matRowDef="let row; columns: displayedColumns"
-                ></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 <!-- No Data Row -->
                 <tr class="mat-row" *matNoDataRow>
                   <td class="mat-cell" [attr.colspan]="displayedColumns.length">
@@ -118,21 +107,22 @@
                   </td>
                 </tr>
               </table>
-              <mat-paginator
-                [pageSizeOptions]="[10, 20, 30]"
-                showFirstLastButtons
-              ></mat-paginator>
+              <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>
             </div>
           </div>
         </fieldset>
         <div class="row text-right">
           <div class="col">
-            <button
-              class="btn btn-ciber-v"
-              [disabled]="(dataCalificacion | json) == '[]'"
-              (click)="datosCalificacionExcel()"
-            >
+            <button class="btn btn-ciber-v mr-2" [disabled]="(dataCalificacion | json) == '[]'"
+              (click)="datosCalificacionExcel()">
               <i class="fa-solid fa-file-csv"></i> Reporte excel
+            </button>
+            <button class="btn btn-dark mr-2" [disabled]="(dataCalificacion | json) == '[]'" (click)="generarPdf()">
+              <i class="fa-solid fa-file-pdf"></i> Reporte Pdf
+            </button>
+            <button *ngIf="mostrarBotonCompartir" class="btn btn-info" [disabled]="(dataCalificacion | json) == '[]'"
+              (click)="copyUrl()">
+              <i class="fa-solid fa-link"></i> Compartir Escalafón
             </button>
           </div>
         </div>

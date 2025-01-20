@@ -11,12 +11,11 @@
             <div class="col">
               <div class="form-group">
                 <label>Nombres: <span class="requerido"> * </span></label>
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="example-full-width" appearance="outline">
                   <input
                     matInput
                     formControlName="nombre"
                     required
-                    placeholder="ej. Daniel E."
                     (input)="transformToUppercase($event, 'nombre')"
                   />
                 </mat-form-field>
@@ -25,11 +24,10 @@
             <div class="col">
               <div class="form-group">
                 <label>Apellidos: <span class="requerido"> * </span></label>
-                <mat-form-field class="example-full-width" appearance="fill">
+                <mat-form-field class="example-full-width" appearance="outline">
                   <input
                     matInput
                     formControlName="apellido"
-                    placeholder="ej. Perdomo G."
                     (input)="transformToUppercase($event, 'apellido')"
                   />
                 </mat-form-field>
@@ -44,13 +42,12 @@
                 >
                 <mat-form-field
                   class="example-full-width"
-                  appearance="fill"
+                  appearance="outline"
                   *ngIf="!editar"
                 >
                   <input
                     type="text"
                     required
-                    placeholder="Ej. Colombia"
                     aria-label="Number"
                     matInput
                     formControlName="pais"
@@ -71,7 +68,7 @@
                 </mat-form-field>
                 <mat-form-field
                   class="example-full-width"
-                  appearance="fill"
+                  appearance="outline"
                   *ngIf="editar"
                 >
                   <mat-select class="font-sm-corhuila" formControlName="pais">
@@ -90,12 +87,8 @@
                 <label
                   >Correo electrónico: <span class="requerido"> * </span></label
                 >
-                <mat-form-field class="example-full-width" appearance="fill">
-                  <input
-                    matInput
-                    formControlName="correoPersonal"
-                    placeholder="ej. example@gmail.com"
-                  />
+                <mat-form-field class="example-full-width" appearance="outline">
+                  <input matInput formControlName="correoPersonal" />
                 </mat-form-field>
               </div>
             </div>

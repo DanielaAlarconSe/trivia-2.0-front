@@ -107,9 +107,14 @@ export class PreguntaRespuestaComponent {
   }
 
   obtenerCuestionarios() {
-    this.cuestionarioService.obtenerCuestionarios().subscribe((data: any) => {
-      this.listadoCuestionarios = data;
-    });
+    this.cuestionarioService
+      .obtenerCuestionarios(
+        this.authService.user.tipoUsuarioCodigo,
+        this.authService.user.personaCodigo
+      )
+      .subscribe((data: any) => {
+        this.listadoCuestionarios = data;
+      });
   }
 
   registrarFormulario(): void {

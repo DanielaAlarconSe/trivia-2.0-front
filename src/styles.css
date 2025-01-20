@@ -3,8 +3,6 @@
 html,
 body {
   height: 100%;
-}
-body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
@@ -30,16 +28,6 @@ body {
   color: #edeff0;
 }
 
-.btn-corhuila-p-2 {
-  background-color: #3e6c83;
-  color: #ffffff;
-}
-
-.btn-corhuila-p-2:hover {
-  background-color: #006983;
-  color: #ffffff;
-}
-
 /*BACKGROUND COLORES PRINCIPALES - SUPERIOR E INFERIOR*/
 
 .bg-ciber-p-as-1 {
@@ -54,22 +42,22 @@ body {
 .mat-mdc-table .mat-mdc-header-cell {
   background: #1e262b !important;
   color: #ffffff !important;
-  font-weight: bold !important;
+  vertical-align: middle;
 }
 
 .mat-mdc-table .mdc-data-table__row:nth-child(even) {
-  background-color: #f4f4f4cc;
+  background-color: #e9f9eb;
 }
 
 .mat-mdc-table .mdc-data-table__row:hover {
   background-color: rgb(236, 236, 236) !important;
+  cursor: pointer;
 }
 
 .table td,
 .table th {
   padding: 0.75rem;
   vertical-align: top;
-  border-top: 1px solid #dee2e6;
   font-size: 12px;
 }
 
@@ -106,4 +94,8 @@ legend.scheduler-border {
   font-size: 16px;
   cursor: pointer;
   z-index: 9999;
+}
+
+.mat-drawer-container {
+  background-color: #f0f4f9;
 }

@@ -17,10 +17,8 @@ import { Router } from '@angular/router';
 import { Persona } from 'src/app/models/persona';
 import { AuthService } from 'src/app/services/auth.service';
 import { PersonaService } from 'src/app/services/persona.service';
-import { DatePipe } from '@angular/common';
 import Swal from 'sweetalert2';
 import { UbicacionService } from 'src/app/services/ubicacion.service';
-import { Pais } from 'src/app/models/pais';
 import { Observable, map, of, startWith } from 'rxjs';
 
 @Component({
@@ -44,7 +42,6 @@ export class PersonaComponent {
     'email',
     'pais',
     'fechaRegistro',
-    'estado',
     'opciones',
   ];
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
@@ -254,7 +251,10 @@ export class ModalFormularioPersona {
       apellido: new FormControl('', Validators.required),
       // DATOS DE CONTACTO
       pais: new FormControl('', Validators.required),
-      correoPersonal: new FormControl('', Validators.required),
+      correoPersonal: new FormControl('', [
+        Validators.required,
+        Validators.email,
+      ]),
       estado: new FormControl(''),
     });
   }
@@ -287,7 +287,6 @@ export class ModalFormularioPersona {
     persona.correo = this.form.get('correoPersonal')!.value;
 
     persona.estado = this.form.get('estado')!.value;
-
 
     if (this.editar) {
       this.actualizarPersona(persona);
@@ -329,18 +328,7 @@ export class ModalFormularioPersona {
   }
 
   actualizarPersona(persona: Persona) {
-
-    const paisSeleccionado = this.form.get('pais')?.value;
-    const codigoPais = paisSeleccionado.codigo;
-
-    let d = new Persona();
-    d.codigo = persona.codigo;
-    d.nombre = persona.nombre;
-    d.apellido = persona.apellido;
-    d.correo = persona.correo;
-    d.paisResidencia = codigoPais;
-
-    this.personaService.actualizarPersona(d).subscribe(
+    this.personaService.actualizarPersona(persona).subscribe(
       (data) => {
         if (data > 0) {
           Swal.fire({

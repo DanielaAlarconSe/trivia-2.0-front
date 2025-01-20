@@ -13,6 +13,7 @@ import { RespuestaService } from 'src/app/services/respuesta.service';
 import { PreguntaService } from 'src/app/services/pregunta.service';
 import { CuestionarioService } from 'src/app/services/cuestionario.service';
 import { PreguntaRespuestaService } from 'src/app/services/pregunta-respuesta.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-vista-previa',
@@ -34,7 +35,8 @@ export class VistaPreviaComponent implements OnInit {
     public cuestionarioService: CuestionarioService,
     public preguntaService: PreguntaService,
     public respuestaService: RespuestaService,
-    public preguntaRespuestaService: PreguntaRespuestaService
+    public preguntaRespuestaService: PreguntaRespuestaService,
+    private authService:AuthService,
   ) {
     this.crearFormulario();
     this.obtenerCuestionarios();
@@ -49,7 +51,8 @@ export class VistaPreviaComponent implements OnInit {
   }
 
   obtenerCuestionarios(): void {
-    this.cuestionarioService.obtenerCuestionarios().subscribe((data) => {
+    this.cuestionarioService.obtenerCuestionarios( this.authService.user.tipoUsuarioCodigo,
+      this.authService.user.personaCodigo).subscribe((data) => {
       this.listadoCuestionarios = data;
     });
   }

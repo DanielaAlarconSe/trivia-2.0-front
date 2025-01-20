@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
@@ -7,7 +7,7 @@ import { Observable, catchError, throwError } from 'rxjs';
 import { Curso } from '../models/curso';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CursoService {
   private url: string = `${environment.URL_BACKEND}/curso`;
@@ -40,9 +40,9 @@ export class CursoService {
     return false;
   }
 
-  obtenerCursos(): Observable<Curso[]> {
+  obtenerCursos(usuario: number, persona: number): Observable<Curso[]> {
     return this.http
-      .get<Curso[]>(`${this.url}/obtener-cursos`, {
+      .get<Curso[]>(`${this.url}/obtener-cursos/${usuario}/${persona}`, {
         headers: this.aggAutorizacionHeader(),
       })
       .pipe(
@@ -54,7 +54,7 @@ export class CursoService {
         })
       );
   }
-  
+
   registrarCurso(curso: Curso): Observable<number> {
     return this.http.post<number>(`${this.url}/registrar-curso`, curso, {
       headers: this.aggAutorizacionHeader(),

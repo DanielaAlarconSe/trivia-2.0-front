@@ -2,7 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, map, shareReplay } from 'rxjs';
-import { environment } from 'src/app/environments/environment';
+import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/services/auth.service';
 import { NavbarHiddenService } from 'src/app/services/navbar-hidden.service';
 import Swal from 'sweetalert2';
@@ -15,7 +15,7 @@ import Swal from 'sweetalert2';
 export class AdminNavbarComponent {
   public nombre: string = this.auth.user.nombre;
   public apellido: string = this.auth.user.apellido;
-  public roles: number = this.auth.user.rol;
+  public roles: number = this.auth.user.tipoUsuarioCodigo;
   public rol: number = this.roles;
   url: string = environment.URL_BACKEND;
   panelOpenState = false;

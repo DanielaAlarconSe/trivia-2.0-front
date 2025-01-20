@@ -65,12 +65,17 @@ export class CursoComponent {
   }
 
   obtenerCursos() {
-    this.cursoService.obtenerCursos().subscribe((data) => {
-      this.listadoCurso = data;
-      this.dataSource = new MatTableDataSource<Curso>(this.listadoCurso);
-      this.paginator.firstPage();
-      this.dataSource.paginator = this.paginator;
-    });
+    this.cursoService
+      .obtenerCursos(
+        this.authService.user.tipoUsuarioCodigo,
+        this.authService.user.personaCodigo
+      )
+      .subscribe((data) => {
+        this.listadoCurso = data;
+        this.dataSource = new MatTableDataSource<Curso>(this.listadoCurso);
+        this.paginator.firstPage();
+        this.dataSource.paginator = this.paginator;
+      });
   }
 
   registrarFormulario(): void {

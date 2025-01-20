@@ -14,10 +14,12 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { PersonaDto } from 'src/app/dto/persona-dto';
-import { UsuarioDto } from 'src/app/dto/usuario-dto';
+import { PersonaDto } from 'src/app/models/dto/persona-dto';
+import { UsuarioDto } from 'src/app/models/dto/usuario-dto';
+import { Entidad } from 'src/app/models/entidad';
 import { UsuarioTipo } from 'src/app/models/usuario-tipo';
 import { AuthService } from 'src/app/services/auth.service';
+import { EntidadService } from 'src/app/services/entidad.service';
 import { PersonaService } from 'src/app/services/persona.service';
 import { UsuarioTipoService } from 'src/app/services/usuario-tipo.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -36,9 +38,10 @@ import Swal from 'sweetalert2';
 })
 export class UsuarioComponent {
   listadoPersona: PersonaDto[] = [];
+  listadoEntidades: Entidad[] = [];
 
   dataSource = new MatTableDataSource<PersonaDto>([]);
-  displayedColumns: string[] = ['index', 'nombres', 'email', 'perfil', 'crear'];
+  displayedColumns: string[] = ['index', 'nombres', 'email', 'perfil', 'entidad', 'crear'];
   @ViewChild(MatPaginator, { static: false }) paginator!: MatPaginator;
 
   dialogRef!: MatDialogRef<any>;
@@ -50,7 +53,6 @@ export class UsuarioComponent {
     public personaService: PersonaService,
     public dialog: MatDialog,
     private authService: AuthService,
-    private router: Router,
     private usuarioService: UsuarioService
   ) {
     if (this.authService.validacionToken()) {
@@ -153,9 +155,11 @@ export class UsuarioComponent {
 export class ModalFormularioUsuario {
   editar: boolean = false;
   listadoPersona: PersonaDto[] = [];
+  listadoEntidades: Entidad[] = [];
   form!: FormGroup;
   usuarioTipo: UsuarioTipo[] = [];
   hide = true;
+  claveGenerada: string | null = null;
 
   constructor(
     public dialogRef: MatDialogRef<ModalFormularioUsuario>,
@@ -166,11 +170,13 @@ export class ModalFormularioUsuario {
     private router: Router,
     private usuarioTipoService: UsuarioTipoService,
     private usuarioService: UsuarioService,
+    private entidadService: EntidadService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     if (this.authService.validacionToken()) {
       this.crearFormUsuario();
       this.obtenerUsuarioTipos();
+      this.obtenerEntidades();
 
       if (JSON.stringify(data) !== 'null' && data.usuario?.usuario > 0) {
         this.editarUsuario(data.usuario);
@@ -181,6 +187,7 @@ export class ModalFormularioUsuario {
   private crearFormUsuario(): void {
     this.form = this.formBuilder.group({
       tipo: new FormControl('', Validators.required),
+      entidad: new FormControl(''),
       contrasena: new FormControl('', [
         Validators.required,
         Validators.minLength(8),
@@ -195,27 +202,62 @@ export class ModalFormularioUsuario {
     });
   }
 
-  editarUsuario(element: PersonaDto) {
-    this.editar = true;
-    this.form.get('tipo')!.setValue(element.tipoUsuarioCodigo);
-  }
-
-  generarUsuario() {
-    let persona: UsuarioDto = new UsuarioDto();
-    persona.codigo = this.data.usuario.codigo;
-    persona.usuario = this.data.usuario.correo;
-    persona.contrasena = this.form.get('contrasena')!.value;
-    persona.tipo = this.form.get('tipo')!.value;
-
-    if (this.editar) {
-      this.actualizarUsuario(persona);
+  onUserTypeChange(tipo: number): void {
+    if (tipo === 4) { // Código para "ASPIRANTE"
+      this.claveGenerada = this.generarClave();
+      this.form.get('contrasena')!.setValue(this.claveGenerada);
+      console.log('Clave generada:', this.claveGenerada); // Opcional: Para depuración
     } else {
-      this.registrarUsuario(persona);
+      this.claveGenerada = null;
     }
   }
 
-  registrarUsuario(persona: any) {
-    this.usuarioService.registrarUsuario(persona).subscribe(
+  private generarClave(): string {
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const longitud = 25;
+    let clave = '';
+    for (let i = 0; i < longitud; i++) {
+      const indiceAleatorio = Math.floor(Math.random() * caracteres.length);
+      clave += caracteres[indiceAleatorio];
+    }
+    return clave;
+  }
+
+  obtenerEntidades() {
+    this.entidadService.obtenerEntidades().subscribe((data) => {
+      this.listadoEntidades = data;
+    });
+  }
+
+  editarUsuario(element: PersonaDto) {
+    this.editar = true;
+    this.form.get('tipo')!.setValue(element.tipoUsuarioCodigo);
+    this.form.get('entidad')!.setValue(element.entidadCodigo);
+  }
+
+  generarUsuario() {
+    let usuario: UsuarioDto = new UsuarioDto();
+    usuario.codigo = this.data.usuario.codigo;
+    usuario.usuario = this.data.usuario.correo;
+    usuario.tipo = this.form.get('tipo')!.value;
+    if( this.form.get('tipo')!.value === 4){
+      usuario.contrasena = this.data.usuario.correo;
+      //usuario.token = this.claveGenerada+'';
+    }else{
+      usuario.contrasena = this.form.get('contrasena')!.value;
+    }
+    usuario.entidad = this.form.get('entidad')!.value;
+
+    if (this.editar) {
+      this.actualizarUsuario(usuario);
+    } else {
+      this.registrarUsuario(usuario);
+    }
+  }
+
+  registrarUsuario(usuario: UsuarioDto) {
+
+    this.usuarioService.registrarUsuario(usuario).subscribe(
       (data) => {
         if (data > 0) {
           Swal.fire({
@@ -226,7 +268,6 @@ export class ModalFormularioUsuario {
             timer: 2500,
           });
           this.dialogRef.close();
-          this.cancelar();
         } else {
           this.mensajeError();
         }
@@ -235,8 +276,8 @@ export class ModalFormularioUsuario {
     );
   }
 
-  actualizarUsuario(persona: any) {
-    this.usuarioService.actualizarUsuario(persona).subscribe(
+  actualizarUsuario(usuario: UsuarioDto) {
+    this.usuarioService.actualizarUsuario(usuario).subscribe(
       (data) => {
         if (data > 0) {
           Swal.fire({
@@ -245,7 +286,6 @@ export class ModalFormularioUsuario {
             text: '¡Operación exitosa!',
             showConfirmButton: false,
           });
-          this.cancelar();
           this.dialogRef.close();
         } else {
           this.mensajeError();
@@ -276,6 +316,4 @@ export class ModalFormularioUsuario {
       this.mensajeError();
     }
   }
-
-  cancelar() {}
 }

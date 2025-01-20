@@ -14,7 +14,7 @@ export class InicioComponent {
   }
 
   obtenerCursos() {
-    this.cursoService.obtenerCursos().subscribe((data) => {
+    this.cursoService.obtenerCursos(0,0).subscribe((data) => {
       this.listadoCursos = data;
     });
   }

@@ -1,12 +1,12 @@
 <app-admin-navbar>
   <div class="pl-4 pr-4 pb-4 text-center">
     <div class="card shadow-sm mt-3">
-      <div class="card-header text-center" style="background-color: #d5dbdb">
-        <h4 class="mt-2">Reporte Respuestas Trivia</h4>
+      <div class="card-header text-center" style="background-color: #98b5b57b">
+        <h4 class="mt-2">Reporte respuestas trivia</h4>
       </div>
       <div class="card-body">
         <fieldset class="scheduler-border shadow-sm">
-          <legend class="scheduler-border font-usco-vt">Consulta</legend>
+          <legend class="scheduler-border">Consulta</legend>
           <div class="row">
             <div class="col">
               <mat-form-field class="example-full-width" appearance="outline">
@@ -21,14 +21,19 @@
                   >
                     {{ curso.nombre }}
                   </mat-option>
+                  <mat-option
+                    *ngIf="authService.user.tipoUsuarioCodigo == 1"
+                    value="0"
+                  >
+                    TODOS
+                  </mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
             <div class="col">
               <mat-form-field class="example-full-width" appearance="outline">
                 <mat-label>Trivias</mat-label>
-                <mat-select
-                >
+                <mat-select>
                   <mat-option
                     *ngFor="let cuestionario of listadoCuestionarios"
                     [value]="cuestionario.codigo"
@@ -42,7 +47,7 @@
           </div>
         </fieldset>
         <fieldset class="scheduler-border shadow-sm">
-          <legend class="scheduler-border font-usco-vt">Resultados</legend>
+          <legend class="scheduler-border">Resultados</legend>
           <div class="row" *ngIf="(listadoReporteAgrupado | json) == '[]'">
             <div class="col">
               <div class="row text-center precarga-img-usco">
@@ -69,14 +74,14 @@
                 >
                   <thead class="table-dark" style="color: white">
                     <tr>
-                      <th>Estudiante</th>
-                      <th>Fecha registro</th>
-                      <th
+                      <td>Estudiante</td>
+                      <td>Fecha registro</td>
+                      <td
                         *ngFor="let columna of listadoPreguntas; let i = index"
                       >
                         {{ i + 1 }}). {{ columna.nombre }}
-                      </th>
-                      <th>Calificacion</th>
+                      </td>
+                      <td>Calificacion</td>
                     </tr>
                   </thead>
                   <tbody class="table-hover">

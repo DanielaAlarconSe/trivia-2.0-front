@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
@@ -40,9 +40,30 @@ export class CuestionarioService {
     return false;
   }
 
-  obtenerCuestionarios(): Observable<Cuestionario[]> {
+  obtenerCuestionarios(
+    usuario: number,
+    persona: number
+  ): Observable<Cuestionario[]> {
     return this.http
-      .get<Cuestionario[]>(`${this.url}/obtener-cuestionarios`, {
+      .get<Cuestionario[]>(
+        `${this.url}/obtener-cuestionarios/${usuario}/${persona}`,
+        {
+          headers: this.aggAutorizacionHeader(),
+        }
+      )
+      .pipe(
+        catchError((e) => {
+          if (this.isNoAutorizado(e)) {
+            return throwError(e);
+          }
+          return throwError(e);
+        })
+      );
+  }
+
+  obtenerCuestionariosAspirantes(): Observable<Cuestionario[]> {
+    return this.http
+      .get<Cuestionario[]>(`${this.url}/obtener-cuestionario-aspirantes`, {
         headers: this.aggAutorizacionHeader(),
       })
       .pipe(
@@ -70,10 +91,61 @@ export class CuestionarioService {
       );
   }
 
+  obtenerCuestionarioToken(token: string): Observable<Cuestionario> {
+    return this.http
+      .get<Cuestionario>(`${this.url}/obtener-cuestionario-token/${token}`, {
+        headers: this.aggAutorizacionHeader(),
+      })
+      .pipe(
+        catchError((e) => {
+          if (this.isNoAutorizado(e)) {
+            return throwError(e);
+          }
+          return throwError(e);
+        })
+      );
+  }
+
+  obtenerCuestionarioTokenAspirante(token: string): Observable<Cuestionario> {
+    return this.http
+      .get<Cuestionario>(
+        `${this.url}/obtener-cuestionario-token-aspirante/${token}`,
+        {
+          headers: this.aggAutorizacionHeader(),
+        }
+      )
+      .pipe(
+        catchError((e) => {
+          if (this.isNoAutorizado(e)) {
+            return throwError(e);
+          }
+          return throwError(e);
+        })
+      );
+  }
+
   obtenerCuestionariosCurso(codigo: number): Observable<Cuestionario[]> {
     return this.http
       .get<Cuestionario[]>(
         `${this.url}/obtener-cuestionarios-curso/${codigo}`,
+        {
+          headers: this.aggAutorizacionHeader(),
+        }
+      )
+      .pipe(
+        catchError((e) => {
+          if (this.isNoAutorizado(e)) {
+            return throwError(e);
+          }
+          return throwError(e);
+        })
+      );
+  }
+
+  obtenerCuestionariosCursoGeneral(codigo: number): Observable<Cuestionario[]> {
+    return this.http
+      .get<Cuestionario[]>(
+        `${this.url}/obtener-cuestionarios-curso-general/${codigo}`,
         {
           headers: this.aggAutorizacionHeader(),
         }

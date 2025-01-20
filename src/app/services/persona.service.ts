@@ -1,14 +1,14 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
 import { Observable, catchError, throwError } from 'rxjs';
 import { Persona } from '../models/persona';
-import { PersonaDto } from '../dto/persona-dto';
+import { PersonaDto } from '../models/dto/persona-dto';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PersonaService {
   private url: string = `${environment.URL_BACKEND}/persona`;
@@ -55,7 +55,7 @@ export class PersonaService {
         })
       );
   }
-  
+
   registrarPersona(persona: Persona): Observable<number> {
     return this.http.post<number>(`${this.url}/registrar-persona`, persona, {
       headers: this.aggAutorizacionHeader(),
@@ -63,6 +63,8 @@ export class PersonaService {
   }
 
   actualizarPersona(persona: Persona): Observable<number> {
+    console.log(persona);
+
     return this.http.put<number>(`${this.url}/actualizar-persona`, persona, {
       headers: this.aggAutorizacionHeader(),
     });
@@ -71,6 +73,21 @@ export class PersonaService {
   obtenerPersonasUsuario(): Observable<PersonaDto[]> {
     return this.http
       .get<PersonaDto[]>(`${this.url}/obtener-personas-usuario`, {
+        headers: this.aggAutorizacionHeader(),
+      })
+      .pipe(
+        catchError((e) => {
+          if (this.isNoAutorizado(e)) {
+            return throwError(e);
+          }
+          return throwError(e);
+        })
+      );
+  }
+
+  obtenerAspirantesEntidad(entidad: number): Observable<PersonaDto[]> {
+    return this.http
+      .get<PersonaDto[]>(`${this.url}/obtener-aspirante-entidad/${entidad}`, {
         headers: this.aggAutorizacionHeader(),
       })
       .pipe(

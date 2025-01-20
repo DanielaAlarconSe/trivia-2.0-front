@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
-import { UsuarioDto } from '../dto/usuario-dto';
+import { UsuarioDto } from '../models/dto/usuario-dto';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -40,14 +40,15 @@ export class UsuarioService {
     }
     return false;
   }
-  
+
   registrarUsuario(usuario: UsuarioDto): Observable<number> {
+    console.log('USUARIO::: ',usuario);
     return this.http.post<number>(`${this.url}/registrar-usuario`, usuario, {
       headers: this.aggAutorizacionHeader(),
     });
   }
 
-  
+
   actualizarUsuario(usuario: UsuarioDto): Observable<number> {
     return this.http.put<number>(`${this.url}/actualizar-usuario`, usuario, {
       headers: this.aggAutorizacionHeader(),

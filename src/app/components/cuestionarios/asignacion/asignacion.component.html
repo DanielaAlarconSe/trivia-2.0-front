@@ -1,0 +1,146 @@
+<app-admin-navbar>
+  <div class="pl-4 pr-4 pb-4 text-center">
+    <div class="card shadow-sm mt-3">
+      <div class="card-header text-center" style="background-color: #98b5b57b">
+        <h4 class="mt-2">Asignar Trivia Aspirante</h4>
+      </div>
+      <div class="card-body">
+        <div class="row mb-4">
+          <div class="col">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Entidad</mat-label>
+              <mat-select (selectionChange)="obtenerAsignacion($event)">
+                <mat-option
+                  *ngFor="let entidad of listadoEntidad"
+                  [value]="entidad"
+                >
+                  {{ entidad.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Campo de búsqueda</mat-label>
+              <input matInput (keyup)="filtrar($event)" type="text" required />
+              <button matSuffix mat-icon-button>
+                <mat-icon>search</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div class="col text-right mt-3" *ngIf="codigoEntidad">
+            <button class="btn btn-ciber-v" (click)="registrarFormulario()">
+              <i class="fa-solid fa-plus"></i> Asignar
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <table
+              mat-table
+              [dataSource]="dataSource"
+              class="table table-hover shadow-sm"
+            >
+              <ng-container matColumnDef="index">
+                <th mat-header-cell *matHeaderCellDef>N°</th>
+                <td mat-cell *matCellDef="let element; let i = index">
+                  {{ dataSource.filteredData.indexOf(element) + 1 }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="entidad">
+                <th mat-header-cell *matHeaderCellDef>Entidad</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.entidadNombre }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="persona">
+                <th mat-header-cell *matHeaderCellDef>Persona</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.personaNombre }} {{ element.personaApellido }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="trivia">
+                <th mat-header-cell *matHeaderCellDef>Trivia</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.cuestionarioNombre }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="seguimiento">
+                <th mat-header-cell *matHeaderCellDef>Seguimiento</th>
+                <td mat-cell *matCellDef="let element">
+                  <span
+                    [ngClass]="{
+                      'alert-warning': element.seguimientoCodigo == 1,
+                      'alert-info': element.seguimientoCodigo == 2,
+                      'alert-success': element.seguimientoCodigo == 3,
+                      'alert-danger': element.seguimientoCodigo == 4
+                    }"
+                    class="alert pt-2"
+                  >
+                    {{ element.seguimientoNombre }}
+                  </span>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="fechaInicio">
+                <th mat-header-cell *matHeaderCellDef>Fecha Asignación</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.fechaAsignacion | date : "dd-MM-yyyy hh:mm a" }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="fechaFin">
+                <th mat-header-cell *matHeaderCellDef>Fecha Finalización</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.fechaFinalizacion | date : "dd-MM-yyyy hh:mm a" }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="opciones">
+                <th mat-header-cell *matHeaderCellDef>Opciones</th>
+                <td mat-cell *matCellDef="let element">
+                  <button
+                    class="btn btn-corhuila-delete btn-sm mr-2"
+                    #tooltip="matTooltip"
+                    matTooltip="Borrar"
+                    matTooltipPosition="above"
+                    (click)="eliminarAsignacion(element)"
+                  >
+                    <i class="fa-solid fa-trash fa-xs"></i>
+                  </button>
+                  <button
+                    class="btn btn-corhuila-editar btn-sm"
+                    #tooltip="matTooltip"
+                    matTooltip="Editar"
+                    matTooltipPosition="above"
+                    (click)="editarFormulario(element)"
+                  >
+                    <i class="fa-solid fa-pencil fa-xs"></i>
+                  </button>
+                  <button
+                    class="btn btn-corhuila-editar btn-sm"
+                    #tooltip="matTooltip"
+                    matTooltip="Enviar"
+                    matTooltipPosition="above"
+                    (click)="enviarEmail(element)"
+                  >
+                    <i class="fa-solid fa-envelope"></i>
+                  </button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              <!-- No Data Row -->
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+                  No hay valores por el momento
+                </td>
+              </tr>
+            </table>
+            <mat-paginator
+              [pageSizeOptions]="[10, 20, 30]"
+              showFirstLastButtons
+            ></mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-admin-navbar>

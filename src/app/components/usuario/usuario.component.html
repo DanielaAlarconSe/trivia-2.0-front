@@ -1,14 +1,14 @@
 <app-admin-navbar>
   <div class="text-center pr-4 pl-4 pb-4">
     <div class="card shadow-sm mt-3">
-      <div class="card-header text-center" style="background-color: #d5dbdb">
-        <h4 class="mt-2">Administración de Usuarios</h4>
+      <div class="card-header text-center" style="background-color: #98b5b57b">
+        <h4 class="mt-2">Administración de usuarios</h4>
       </div>
       <div class="card-body">
         <div class="row">
           <div class="col text-left">
             <div class="form-group">
-              <mat-form-field appearance="outline" style="width: 100%">
+              <mat-form-field appearance="outline" class="example-full-width">
                 <mat-label>Campo de búsqueda</mat-label>
                 <input
                   matInput
@@ -58,14 +58,22 @@
                     title="Activo"
                   >
                     <i class="fa-solid fa-check fa-xs"></i>
+                    {{ element.tipoUsuarioNombre }}
                   </button>
                   <button
                     *ngIf="element.usuario < 1"
                     class="btn btn-secondary btn-sm mr-2"
                     title="Inactivo"
                   >
-                    <i class="fa-regular fa-circle-xmark"></i>
+                    <i class="fa-regular fa-circle-xmark"></i
+                    >{{ element.tipoUsuarioNombre }}
                   </button>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="entidad">
+                <th mat-header-cell *matHeaderCellDef>Entidad</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.entidadNombre }}
                 </td>
               </ng-container>
               <ng-container matColumnDef="crear">

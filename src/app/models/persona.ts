@@ -4,7 +4,7 @@ export class Persona {
   apellido!: string;
   paisResidencia!: number;
   correo!: string;
-  estado!: number;
   fechaRegistro!: Date;
   nombrePaisResidencia!: string;
+  estado!: number;
 }

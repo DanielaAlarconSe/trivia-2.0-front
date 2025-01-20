@@ -37,7 +37,7 @@ small {
 }
 
 .sidenav .mat-toolbar {
-  background: linear-gradient(to right, white, green, rgb(4, 101, 4));
+  background-color: #293737;
   color: #fff;
 }
 

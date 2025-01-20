@@ -3,7 +3,7 @@ import { Usuario } from '../models/usuario';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, catchError, throwError } from 'rxjs';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import Swal from 'sweetalert2';
 
 @Injectable({
@@ -121,10 +121,14 @@ export class AuthService {
     //  let helper = new JwtHelperService();
     // let datos = helper.decodeToken(accessToken);
     this.usuario = new Usuario();
-    this.usuario.username = datos.username;
+    this.usuario.codigo = datos.usuarioCodigo;
+    this.usuario.horaSesion = datos.horaSesion;
+    this.usuario.personaCodigo = datos.personaCodigo;
     this.usuario.nombre = datos.nombre;
+    this.usuario.tipoUsuarioCodigo = datos.tipoUsuarioCodigo;
+    this.usuario.tipoUsuarioNombre = datos.tipoUsuarioNombre;
     this.usuario.apellido = datos.apellido;
-    this.usuario.rol = datos.role;
+    this.usuario.triviaToken = datos.triviaToken;
 
     sessionStorage.setItem('usuario', JSON.stringify(this.usuario));
     localStorage.setItem('usuario', JSON.stringify(this.usuario));

@@ -1,13 +1,14 @@
 import { RespuestaTipo } from './../models/respuesta-tipo';
 import { Injectable } from '@angular/core';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
 import { Observable, catchError, throwError } from 'rxjs';
 import { RespuestaCuestionario } from '../models/respuesta-cuestionario';
 import { Calificacion } from '../models/calificacion';
-import { ReporteAgrupadoDto } from '../dto/reporte-agrupado-dto';
+import { ReporteAgrupadoDto } from '../models/dto/reporte-agrupado-dto';
+import { EmailNotificacionDto } from '../models/dto/email-notificacion-dto';
 
 @Injectable({
   providedIn: 'root',
@@ -58,6 +59,24 @@ export class ResultadosReportesService {
     });
   }
 
+  obtenerCalificacionesTrivia(codigo: number): Observable<Calificacion[]> {
+    return this.http.get<Calificacion[]>(
+      `${this.url}/obtener-calificaciones-trivia/${codigo}`,
+      {
+        headers: this.aggAutorizacionHeader(),
+      }
+    );
+  }
+
+  obtenerCalificacionesToken(token: string): Observable<Calificacion[]> {
+    return this.http.get<Calificacion[]>(
+      `${this.url}/obtener-calificaciones-token/${token}`,
+      {
+        headers: this.aggAutorizacionHeader(),
+      }
+    );
+  }
+
   generarDatosReporteAgrupado(
     cuestionario: number,
     preguntas: number[]
@@ -77,5 +96,9 @@ export class ResultadosReportesService {
           return throwError(e);
         })
       );
+  }
+
+  public emailNotificacionEntidad(email: EmailNotificacionDto): Observable<EmailNotificacionDto> {
+    return this.http.put<EmailNotificacionDto>(`${this.url}/email/entidad`, email);
   }
 }
